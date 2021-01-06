@@ -44,7 +44,7 @@ p <- ggplot(df, aes(colour=cost_km_millions)) +
                               subtitle = "Construction timelines for the most expensive transit-infrastructure \nprojects in each country",
                               colour = "US Dollars \n(millions)/km") 
 p
-ggsave(p, filename = "05012021.jpg", bg = "transparent", height=10, width=8)
+ggsave(p, filename = "05012021.jpg", height=10, width=8, units="in")
 
 
 
