@@ -9,10 +9,11 @@ raw_df <- tuesdata$transit_cost
 df <- raw_df %>% group_by(country) %>% top_n(1, cost_km_millions) 
 #obtain country names
 df$end_year <- as.numeric(df$end_year) 
-df <- df %>% drop_na(c("country", "start_year", "end_year", "cost_km_millions"), any_of(vars))
 df$country_name <- countrycode(df$country, "ecb", "country.name")
 df$country_name[which(df$country == "UK")] <- "United Kingdom"
+#remove NA and get distinct names
 df <- distinct(df)
+df <- df %>% drop_na(c("country", "start_year", "end_year", "cost_km_millions"))
 #plot
 p <- ggplot(df, aes(colour=cost_km_millions)) +
   #plot project duration
