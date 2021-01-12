@@ -55,6 +55,6 @@ p <- ggplot(data = world) +
         axis.title.y= element_text(colour="#207567", size=11),
         panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 p
-ggsave(p, filename = "12012021.jpg", height=10, width=8, units="in")
+ggsave(p, filename = "12012021.jpg", units="in")
 
 
