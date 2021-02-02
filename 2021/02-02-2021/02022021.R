@@ -21,9 +21,6 @@ p <- ggplot(data = d, aes(year)) +
   annotate("text", x = 1981, y = 360000, label = "1981", colour = "#c51b8a", size=6, fontface=2) +
   annotate("text", x = 1981, y = 310000, label = "White House\nInitiative on HBCUs", colour = "#c51b8a", size=5) +
   geom_segment(aes(x = 1981, y = 240000, xend = 1981, yend = 270000), colour = "#c51b8a") +
-  annotate("text", x = 1996, y = 400000, label = "1996", colour = "#c51b8a", size=6, fontface=2) +
-  annotate("text", x = 1996, y = 350000, label = "California and Texas\nban affirmative action", colour = "#c51b8a", size=5) +
-  geom_segment(aes(x = 1996, y = 280000, xend = 1996, yend = 310000), colour = "#c51b8a") +
   theme(panel.background = element_rect(fill = "#fde0dd"),
         plot.background = element_rect(fill = "#fde0dd"),
         legend.background = element_rect(fill = "#fde0dd"),
