@@ -12,7 +12,7 @@ p <- ggplot(data = d, aes(year)) +
   geom_ribbon(aes(ymin = slaves, ymax = rep(100,length(year))), fill = "springgreen4") +
   geom_segment(aes(x=year, xend = year, y=0, yend = 100), colour=alpha("black", 0.2)) +
   ylim(0,105) + 
-  labs(title="PROPORTION OF FREEMEN AND SLAVES AMONG AMERICAN NEGROES .\n\nPROPORTION DES NÈGRES LIBRES ET DES ESCLAVES EN AMÉRIQUE .\n", subtitle="DONE BY ATLANTA UNIVERSITY") +
+  labs(title="PROPORTION OF FREEMEN AND SLAVES AMONG AMERICAN NEGROES .\n\nPROPORTION DES NÈGRES LIBRES ET DES ESCLAVES EN AMÉRIQUE .\n", subtitle="DONE BY ATLANTA UNIVERSITY\n") +
   geom_text(aes(x=year, y=c(slaves[1:length(slaves)-1],slaves[length(slaves)-1])+3, label=label), colour="black", size=4, fontface=2) +
   geom_text(aes(x=year, y=103, label=year), colour="black", fontface=2, size=5) +
   annotate("text", x = 1830, y = 50, label = "SLAVES\nESCLAVES", colour = "wheat2", size=5, fontface=2) +
