@@ -23,7 +23,7 @@ df <- data.frame(
 p1 <- ggplot(df, aes(x, y)) +
   geom_tile(aes(fill = z)) +
   scale_fill_manual("", values=all_hex) +
-  labs(title="\nImplicit Bias in Makeup Shades", subtitle = "Beauty brands often label foundation shades with sequential numbers, which\nimplicitly prioritises those at the beginning of the sequence. Most companies rank\nlighter shades of foundation higher, and therefore prioritise customers with lighter skin. \n\n These are the shades of foundation on sale from Fenty Beauty, Revlon bareMinerals,\nL'Oreal, Maybelline, and Origins:") +
+  labs(title="\nImplicit Bias in Makeup Shades", subtitle = "Beauty brands often label foundation shades with sequential numbers, which\nimplicitly prioritises those at the beginning of the sequence. Most companies rank\nlighter shades of foundation higher, and therefore prioritise customers with lighter skin. \n\n These are the shades of foundation on sale from Fenty Beauty, Revlon, bareMinerals,\nL'Oreal, Maybelline, and Origins:") +
   theme(plot.background = element_rect(fill = "lightpink"),
         panel.background = element_rect(fill = "lightpink"),
         legend.background = element_rect(fill = "lightpink"),
@@ -66,7 +66,7 @@ p2 <- ggplot(long_data, aes(x, y, width=1, height=1)) +
         legend.position = "none")
 p2
 
-#dev.new(width=7,height=6,unit="in", noRStudioGD = TRUE)
+dev.new(width=7,height=6,unit="in", noRStudioGD = TRUE)
 
 p <- plot_grid(p1,p2,ncol=1,nrow=2) + theme(plot.background = element_rect(fill="lightpink", color = "lightpink"))
 p
