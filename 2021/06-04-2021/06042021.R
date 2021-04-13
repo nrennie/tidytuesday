@@ -137,6 +137,5 @@ for(i in 2:53){
   combined <- image_append(c(a_mgif[i], b_mgif[i]))
   new_gif <- c(new_gif, combined)
 }
-
 image_write(image = new_gif,path = "06042021.gif")
 
