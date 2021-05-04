@@ -205,7 +205,7 @@ p <- p1 + p2 + p3 + p4 + plot_spacer() + plot_spacer() + plot_layout(ncol = 3, g
   theme(panel.background = element_rect(fill = "#060405", colour="#060405"),
         plot.background = element_rect(fill = "#060405", colour="#060405"),
         legend.position = "none",
-        plot.subtitle = element_text(colour = "#d0605e", size=22, face="bold", hjust = 0.86, vjust=-60, family="Elephant"),
+        plot.subtitle = element_text(colour = "#d0605e", size=22, face="bold", hjust = 0.76, vjust=-60, family="Elephant"),
         plot.caption = element_text(colour = "#fba55a", size=10, face="bold", hjust = 0, family="Elephant"))
 p
 
