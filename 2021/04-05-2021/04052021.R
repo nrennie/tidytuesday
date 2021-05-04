@@ -36,7 +36,7 @@ ken_pts <- ken_data[st_intersects(ken_pnts_sf, kenya, sparse=F)[,1],]
 
 p1 <- ggplot() +
   geom_sf(data = kenya, fill="#fba55a") +
-  coord_sf(xlim = c(30.5, 45.5), ylim = c(-6,6)) +
+  coord_sf(xlim = c(32, 44), ylim = c(-6,6)) +
   geom_point(data=ken_pts, aes(x=lon_deg, y=lat_deg, colour=tech), size=1.5) +
   scale_colour_manual("Each point shows the location of a water source,\nwith the colour representing the method of water\ntransportation e.g. hand pump.\n ", values=c("Hand Pump"="red1", "Mechanized Pump"="purple2", "Other"="green4"), breaks=c("Hand Pump", "Mechanized Pump", "Other"), labels=c("Hand Pump      ", "Mechanized Pump     ", "Other")) +
   labs(title="\nKENYA") +
@@ -125,7 +125,7 @@ zim_pts <- zim_data[st_intersects(zim_pnts_sf, zimbabwe, sparse=F)[,1],]
 
 p3 <- ggplot() +
   geom_sf(data = zimbabwe, fill="#fba55a") +
-  coord_sf(xlim = c(33, 48)-11, ylim = c(3,15)-28) +
+  coord_sf(xlim = c(35, 46)-11, ylim = c(5,13)-28) +
   geom_point(data=zim_pts, aes(x=lon_deg, y=lat_deg, colour=tech), size=1) +
   scale_colour_manual("", values=c("Hand Pump"="red1", "Mechanized Pump"="purple2", "Other"="green4"), breaks=c("Hand Pump", "Mechanized Pump", "Other"), labels=c("Hand Pump    ", "Mechanized Pump ", "Other")) +
   labs(title="\nZIMBABWE") +
@@ -154,24 +154,24 @@ p3
 ##########################################################################################################################
 #########################################################################################################################
 
-#Namibia
-namibia <- world[world$name == "Namibia",] 
-nam_data <- filter(water, country_name == "Namibia")
-nam_data <- nam_data[which(!is.na(nam_data$water_tech)),]
-nam_data$tech <- sapply(nam_data$water_tech, function(x) tech_change(x))
+#Zambia
+zambia <- world[world$name == "Zambia",] 
+zam_data <- filter(water, country_name == "Zambia")
+zam_data <- zam_data[which(!is.na(zam_data$water_tech)),]
+zam_data$tech <- sapply(zam_data$water_tech, function(x) tech_change(x))
 
-nam_dat <- data.frame(Longitude = nam_data$lon_deg, Latitude = nam_data$lat_deg)
-coordinates(nam_dat) <- ~ Longitude + Latitude
-proj4string(nam_dat) <- CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
-nam_pnts_sf <- st_as_sf(nam_dat, coords = c('Latitude', 'Longitude'), crs = st_crs(map))
-nam_pts <- nam_data[st_intersects(nam_pnts_sf, namibia, sparse=F)[,1],]
+zam_dat <- data.frame(Longitude = zam_data$lon_deg, Latitude = zam_data$lat_deg)
+coordinates(zam_dat) <- ~ Longitude + Latitude
+proj4string(zam_dat) <- CRS("+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0")
+zam_pnts_sf <- st_as_sf(zam_dat, coords = c('Latitude', 'Longitude'), crs = st_crs(map))
+zam_pts <- zam_data[st_intersects(zam_pnts_sf, zambia, sparse=F)[,1],]
 
 p4 <- ggplot() +
-  geom_sf(data = namibia, fill="#fba55a") +
-  coord_sf(xlim = c(33, 48)-22, ylim = c(3,17)-33) +
-  geom_point(data=nam_pts, aes(x=lon_deg, y=lat_deg, colour=tech), size=1.5) +
+  geom_sf(data = zambia, fill="#fba55a") +
+  coord_sf(xlim = c(34, 47)-13, ylim = c(3,17)-24) +
+  geom_point(data=zam_pts, aes(x=lon_deg, y=lat_deg, colour=tech), size=1.5) +
   scale_colour_manual("", values=c("Hand Pump"="red1", "Mechanized Pump"="purple2", "Other"="green4"), breaks=c("Hand Pump", "Mechanized Pump", "Other")) +
-  labs(title="\nNAMIBIA") +
+  labs(title="\nZAMBIA") +
   theme(panel.background = element_rect(fill = "#060405"),
         plot.background = element_rect(fill = "#060405"),
         legend.background = element_rect(fill = "#060405"),
