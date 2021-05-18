@@ -27,7 +27,7 @@ p1 <- ggplot() +
                             lab=c("High\nSchool", "College\ndegree", "Master's\ndegree", "PhD" , "Professional\ndegree")), 
             aes(x=degrees, y=y, label=lab), family="Poor Richard", size=3) +
   geom_text(data=data.frame(degrees, y=rep(-90000,5), lab=med_labels), aes(x=degrees, y=y, label=lab), family="Poor Richard", size=3) +
-  ggtitle("Median Annual Salary")+
+  ggtitle("Annual Salary")+
   theme(panel.background = element_rect(fill = "gray95"),
         plot.background = element_rect(fill = "gray95"),
         legend.background = element_rect(fill = "gray95"),
@@ -56,7 +56,7 @@ p2 <- ggplot() +
   scale_fill_manual("",values=c("#EC576B", "#4EC5C1", "#E5E338", "#ec8e57", "#a76eef")) +
   coord_flip() +
   scale_y_continuous(breaks=c(0, 100000, 200000, 300000), labels=c("0", "100K", "200K", "300K"), limits=c(-100000,350000)) +
-  ggtitle("Median Annual Additional Monetary Compensation")+
+  ggtitle("Additional Monetary Compensation")+
   geom_text(data=data.frame(degrees, y=rep(-30000,5), 
                             lab=c("High\nSchool", "College\ndegree", "Master's\ndegree", "PhD" , "Professional\ndegree")), 
             aes(x=degrees, y=y, label=lab), family="Poor Richard", size=3) +
