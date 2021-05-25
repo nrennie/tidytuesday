@@ -5,5 +5,5 @@ The number of world records for a single lap for each of the tracks for Mario Ka
 I also look at the world records for the fastest time for a single lap of Mario Kart 64: Mario Raceway. The average time for a player to hold a world record is 453 days for NTSC systems, and 218 days for PAL systems.
 
 <p align="center">
-  <img src="https://github.com/nrennie/tidytuesday/blob/main/2021/25-05-2021/25052021.jpg?raw=true" width="50%">
+  <img src="https://github.com/nrennie/tidytuesday/blob/main/2021/25-05-2021/25052021.jpg?raw=true" width="90%">
     </p>
