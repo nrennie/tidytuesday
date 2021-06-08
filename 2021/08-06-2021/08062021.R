@@ -40,9 +40,9 @@ p
 
 #dev.new(width=13,height=8,unit="cm", noRStudioGD = TRUE)
 
-fish1 <- "C:/Users/rennien/OneDrive - Lancaster University/Programming/git/tidytuesday/2021/08-06-2021/blue_pike.png"
-fish2 <- "C:/Users/rennien/OneDrive - Lancaster University/Programming/git/tidytuesday/2021/08-06-2021/lake_trout.png"
-fish3 <- "C:/Users/rennien/OneDrive - Lancaster University/Programming/git/tidytuesday/2021/08-06-2021/lake_whitefish.png"
+fish1 <- "./blue_pike.png"
+fish2 <- "./lake_trout.png"
+fish3 <- "./lake_whitefish.png"
 
 q <- ggdraw() + 
   draw_plot(p) +
