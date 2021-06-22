@@ -13,11 +13,11 @@ choose_cities$city <- factor(choose_cities$city, levels=cities)
 choose_cities$park_pct_city_data <- as.numeric(gsub('.{1}$', '', choose_cities$park_pct_city_data))
 
 #stream plot
-p1 <- ggplot(choose_cities, aes(x=year, y=park_pct_city_data/5, fill=city, group=city)) +
-  geom_stream(color = NA, bw = 0.9, type="ridge") +
-  scale_fill_manual("",values=c("#730046", "#bfbb11", "#ffc200", "#e88801", "#c93c00")) +
+p1 <- ggplot(parks, aes(x=year, y=park_pct_city_data, fill=city, group=city)) +
+  geom_stream(color = NA, bw = 0.9, type="ridge", extra_span = 0.1) +
+  #scale_fill_manual("",values=c("#730046", "#bfbb11", "#ffc200", "#e88801", "#c93c00")) +
   labs(x="", y="Parkland as percentage\nof city area (%)", title="City parks", 
-       subtitle="The percentage of the city area dedicated to parks in the five largest cities in the\nUS has continued to fall since 2012. Until 2020, when the pandemic brought about\nrenewed interest in spending time outdoors.") +
+       subtitle="The percentage of the city area dedicated to parks across the US has generally\nincreased between 2012 and 2016. Since 2016, it has remained fairly stable.") +
   theme(plot.background = element_rect(fill = "ivory2", colour="ivory2"),
         panel.background = element_rect(fill = "ivory2", colour="ivory2"),
         legend.background = element_rect(fill = "ivory2"),
@@ -29,12 +29,13 @@ p1 <- ggplot(choose_cities, aes(x=year, y=park_pct_city_data/5, fill=city, group
         plot.title = element_text(colour = "#730046", size=24, face="bold", hjust = 0, family="Candara Light"),
         plot.subtitle = element_text(colour = "#730046", size=14, hjust = 0, family="Candara Light"),
         plot.caption = element_text(colour = "#730046", size=12, hjust = 0, family="Candara Light"),
-        legend.position="bottom",
+        legend.position="none",
         plot.margin = unit(c(0.3, 0.6, 0.3, 0.3), "cm"), #top, right, bottom, left
         axis.title= element_text(colour = "#730046", size=10, hjust = 0.5, family="Candara Light"),
-        axis.text = element_text(colour = "#730046", size=10, hjust = 0.5, family="Candara Light"),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text.x= element_text(colour = "#730046", size=10, hjust = 0.5, family="Candara Light"),
         panel.grid.minor = element_blank())
-
 
 p1
 
