@@ -7,3 +7,11 @@ The percentage of the city area dedicated to parks in the five largest cities in
 <p align="center">
   <img src="https://github.com/nrennie/tidytuesday/blob/main/2021/22-06-2021/22062021.jpg?raw=true" width="90%">
 </p>
+
+<p align="center">
+  <img src="https://github.com/nrennie/tidytuesday/blob/main/2021/22-06-2021/22062021_v2.jpg?raw=true" width="90%">
+</p>
+
+<p align="center">
+  <img src="https://github.com/nrennie/tidytuesday/blob/main/2021/22-06-2021/22062021_v3.jpg?raw=true" width="90%">
+</p>
