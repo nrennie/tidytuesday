@@ -88,8 +88,8 @@ p
 #add titles etc
 q <- ggdraw() + 
   draw_plot(p) +
-  draw_label(label="Animal\nRescues", x=0.25, y=0.9, hjust=0.5, fontfamily="Gill Sans Ultra Bold", size=24, colour = "#800080") +
-  draw_label(label="Cats are the most commonly rescued animal, with\nmore than double the number of rescues as dogs.\nIn 2020, the number of rescues increased\nfor most animals, though not for dogs.\nFewer calls are reported between\n04:00 and 06:00.\n\nN. Rennie | Data: London.gov",
+  draw_label(label="Animal\nRescues", x=0.25, y=0.93, hjust=0.5, fontfamily="Gill Sans Ultra Bold", size=24, colour = "#800080") +
+  draw_label(label="Cats are the most commonly rescued animal, with\nmore than double the number of rescues as dogs.\nIn 2020, the number of rescues increased\nfor most animals, though not for dogs.\nFewer calls are reported between\n04:00 and 06:00.\n\n*Data up to 31 May 2021\n\nN. Rennie | Data: London.gov",
              x=0.25, y=0.75, hjust=0.5, fontfamily="Gill Sans MT Condensed", size=12, colour = "#800080") 
 
 
