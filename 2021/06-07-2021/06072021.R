@@ -186,7 +186,7 @@ p
 q <- ggdraw() + 
   draw_plot(p) +
   draw_label(label="Independence\nDays", x=0.75, y=0.63, hjust=0.5, fontfamily="Eras Bold ITC", size=40, colour = "#AD235E") +
-  draw_label(label="Swiss National Day celebrates the\nAnniversary of the Federal Charter\non August 1, 1291. Although it is\nthe earliest commerated event, it\nwasn't celebrated until in 1891. \n\n*where countries have multiple\nnational/independence days, the\nearlier date is shown.\n\nN. Rennie | Data: Wikipedia",
+  draw_label(label="Swiss National Day celebrates the\nAnniversary of the Federal Charter\non August 1, 1291. Although it is\nthe earliest commemorated event, it\nwasn't celebrated until in 1891. \n\n*where countries have multiple\nnational/independence days, the\nearlier date is shown.\n\nN. Rennie | Data: Wikipedia",
              x=0.75, y=0.49, hjust=0.5, fontfamily="Eras Medium ITC", size=20, colour = "#AD235E") 
 
 
