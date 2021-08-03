@@ -21,7 +21,7 @@ p <- ggplot(gold_medals_GB, aes(x=sport, y=total_medals)) +
   geom_text(aes(x=sport, y=y_text, label=total_medals), colour = "#da0019", size=4, hjust = 0.5, family="Gill Sans MT") +
   geom_segment(aes(x=sport, xend=sport, y=min(total_medals), yend=max(total_medals)), linetype="dashed", size=0.1, colour="#005085") +   # Draw dashed lines
   labs(title="TEAM GB: Going for Gold", 
-       subtitle="Since the Summer Olympic Games began in 1896, TEAM\nGB have won 636 gold medals across 30 different sports*.\nRowing is easily thier best sport, winning 109 gold medals.", 
+       subtitle="Since the Summer Olympic Games began in 1896, TEAM\nGB have won 636 gold medals across 30 different sports*.\nRowing is easily their best sport, winning 109 gold medals.", 
        caption="\nN. Rennie | Data: www.sports-reference.com\n*Data up to and including Rio 2016", 
        x="", y="Total number of gold medals") +  
   scale_y_continuous(breaks=c(25, 50, 75, 100)) +
