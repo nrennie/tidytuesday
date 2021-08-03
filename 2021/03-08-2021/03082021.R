@@ -91,3 +91,33 @@ q <- ggdraw() +
   draw_image(gb_logo, x = 0.1, y = 0.99, hjust = 0.5, vjust = 1, halign = 1, valign = 1, width = 0.08) +
   draw_image(us_logo, x = 0.9, y = 0.98, hjust = 0.5, vjust = 1, halign = 1, valign = 1, width = 0.19)
 q
+
+
+##################### make a table ##############################
+
+library(gt)
+library(scales)
+
+tuesdata <- tidytuesdayR::tt_load('2021-08-03')
+athletes <- tuesdata$athletes
+plot_data <- athletes %>% filter(year == "2016") %>% group_by(abb, medal) %>% summarise(total_medals = n())
+wide_data <- pivot_wider(plot_data, names_from=medal, values_from = total_medals)
+wide_data$score <- 3*wide_data$Gold + 2*wide_data$Silver + 1*wide_data$Bronze
+wide_data <- wide_data[order(-wide_data$score),]
+wide_data$rank <- 1:nrow(wide_data)
+to_plot <- tibble(wide_data[1:10,])
+
+gold_color_generator <- scales::col_numeric(c("gold2", "white"), domain = c(160:0))
+silver_color_generator <- scales::col_numeric(c("grey60", "white"), domain = c(120:10))
+bronze_color_generator <- scales::col_numeric(c("sandybrown", "white"), domain = c(70:0))
+
+gt_tbl <- to_plot[,c(1,3,4,2,5)] %>% gt(rowname_col = "abb") %>% 
+  tab_header(title = "Top 10 Countries", subtitle = "The ten highest scoring countries at the 2016 Summer Paralympic Games") %>%
+  tab_source_note(source_note = md("N. Rennie | Data: International Paralympic Committee"))  %>% 
+  cols_label(Bronze="Bronze", Silver="Silver", Gold="Gold", score="Total")  %>%
+  data_color(columns = c(Gold), colors = gold_color_generator(sort(to_plot$Gold, decreasing = T))) %>%
+  data_color(columns = c(Silver), colors = silver_color_generator(sort(to_plot$Silver, decreasing = T))) %>%
+  data_color(columns = c(Bronze), colors = bronze_color_generator(sort(to_plot$Bronze, decreasing = T)))
+
+gt_tbl
+

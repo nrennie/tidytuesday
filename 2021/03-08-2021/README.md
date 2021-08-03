@@ -4,4 +4,12 @@ Athletics has generated the most paralympic medals for both Teams USA and GB, it
 
 <p align="center">
   <img src="https://github.com/nrennie/tidytuesday/blob/main/2021/03-08-2021/03082021.jpg?raw=true" width="60%">
-    </p>
+</p>
+
+<h1 align="center">
+  Top 10 Countries</h1>
+The ten highest scoring countries at the 2016 Summer Paralympic Games.
+
+<p align="center">
+  <img src="https://github.com/nrennie/tidytuesday/blob/main/2021/03-08-2021/03082021_table.png?raw=true" width="60%">
+</p>
