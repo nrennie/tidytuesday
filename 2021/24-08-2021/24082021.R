@@ -74,8 +74,8 @@ p3
 p0 <- p2 + p3 + plot_layout(nrow=2, ncol=1) 
 p <- p1 + p0 +
   plot_annotation(title = "\nCollared Brown Lemur", 
-                  caption = "N. Rennie | Data:  Duke Lemur Centre | Image:  Duke Lemur Centre", 
-                  subtitle="\nAt Duke Lemur Centre, collared brown lemurs live to an average of 23.6 years. The oldest\ncollared brown lemur at Duke Lemur Centre was Yvette who was born in 1959 and lived\nto the age of 32.6 years. \n\nCollared brown lemurs mature at about 3 years old. Once fully-grown, females tend to\nweigh more than males.") &
+                  caption = "N. Rennie | Data:  Duke Lemur Center | Image:  Duke Lemur Center", 
+                  subtitle="\nAt Duke Lemur Center, collared brown lemurs live to an average of 23.6 years. The oldest\ncollared brown lemur at Duke Lemur Center was Yvette who was born in 1959 and lived\nto the age of 32.6 years. \n\nCollared brown lemurs mature at about 3 years old. Once fully-grown, females tend to\nweigh more than males.") &
   theme(plot.background = element_rect(fill = "#F5F5DC", colour="#F5F5DC"),
         panel.background = element_rect(fill = "#F5F5DC", colour="#F5F5DC"),
         plot.title = element_text(colour = "#4e2e12", size=28, hjust = 0, family="Gill Sans Ultra Bold"),
