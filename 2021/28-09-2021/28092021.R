@@ -81,8 +81,3 @@ pggnetwork <-
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank()) 
 pggnetwork
-
-
-
-
-
