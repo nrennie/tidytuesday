@@ -3,6 +3,7 @@ library(magick)
 library(grid)
 library(extrafont)
 library(sf)
+library(cowplot)
 library(rnaturalearthdata)
 library(rnaturalearth)
 
