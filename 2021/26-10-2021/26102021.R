@@ -13,7 +13,7 @@ plot_data <- left_join(ultra_rankings, race, by="race_year_id") %>%
   filter(!is.na(time), 
          rank == 1, 
          runner != "NO Participants") %>%
-  mutate(dec_time = hour(hms(time)) + (minute(hms(time))/60) + (second(hms(time))/360), 
+  mutate(dec_time = hour(hms(time)) + (minute(hms(time))/60) + (second(hms(time))/3600), 
          pace=60*dec_time/distance) %>%
   filter(!is.infinite(pace))
 
