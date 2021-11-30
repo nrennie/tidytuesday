@@ -1,7 +1,6 @@
 library(tidyverse)
 library(lubridate)
 library(ggbump)
-library(ggdist)
 library(patchwork)
 library(cowplot)
 library(magick)
@@ -17,20 +16,22 @@ games_data <- tibble(team=names(teams), games=teams)
 win_data <- tibble(team=names(teams_won), wins=teams_won)
 plot_data1 <- left_join(games_data, win_data, by="team") %>%
   mutate(wins = replace_na(wins, 0), 
-         losses = games - wins) %>%
-  pivot_longer(cols=c("wins", "losses"), values_to = "num_games", names_to = "type") %>%
-  mutate(teamf = fct_reorder(factor(team), games, min))
+         losses = games - wins, 
+         percentage = 100*round(wins/games, 2)) %>%
+  mutate(teamf = fct_reorder(factor(team), games, min)) %>%
+  pivot_longer(cols=c("wins", "losses", "percentage"), values_to = "num_games", names_to = "type") 
 
-p1 <- ggplot(data=plot_data1, aes(x=teamf, y=num_games, fill=type)) + 
+p1 <- ggplot(data=filter(plot_data1, type != "percentage"), aes(x=teamf, y=num_games, fill=type)) + 
   geom_bar(stat = "identity", position="stack") +
-  geom_text(data=filter(plot_data1, type=="losses"), 
-            mapping=aes(x = teamf, y=games+10, label = teamf), 
+  geom_text(data=filter(plot_data1, type=="percentage"), 
+            mapping=aes(x = teamf, y=games+10, 
+                        label = paste(teamf, " (", num_games, "%) ", sep="")), 
             hjust = 0, colour = "#006629", family="serif") +
   coord_flip(expand = F) +
-  scale_y_continuous(limits=c(0, 400)) +
+  scale_y_continuous(limits=c(0, 450)) +
   guides(fill=guide_legend(nrow=1, label.hjust=0)) +
-  scale_fill_manual("", values=c("#006629", "#7ea881"), breaks=c("wins", "losses"), labels=c("Wins", "Losses")) +
-  scale_colour_manual("", values=c("#006629", "#7ea881"), breaks=c("wins", "losses"), labels=c("Wins", "Losses")) +
+  scale_fill_manual("", values=c("#006629", "#7ea881", "white"), breaks=c("wins", "losses"), labels=c("Wins", "Losses")) +
+  scale_colour_manual("", values=c("#006629", "#7ea881", "white"), breaks=c("wins", "losses"), labels=c("Wins", "Losses")) +
   labs(x="", y="Number of games", title="ICC MEN'S CRICKET WORLD CUP\n") +
   theme(plot.background = element_rect(fill = "#D8E4D9", colour="#D8E4D9"),
         panel.background = element_rect(fill = "#D8E4D9", colour="#D8E4D9"),
