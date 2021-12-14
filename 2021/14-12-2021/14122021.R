@@ -18,10 +18,6 @@ plot_data <- studio_album_tracks %>%
 plot_data %>%
   ggradar()
 
-
-
-stringr::upp
-          
 # make plot
 p <- plot_data %>%
   ggradar(font.radar = "serif", 
