@@ -23,7 +23,7 @@ plot_data %>%
 stringr::upp
           
 # make plot
-plot_data %>%
+p <- plot_data %>%
   ggradar(font.radar = "serif", 
           axis.labels = str_to_title(colnames(plot_data)[-1]),
           axis.line.colour = "#AA336A",
@@ -53,4 +53,7 @@ plot_data %>%
         plot.margin = unit(c(0.3, 0.3, 0.3, 9), "cm"), #top, right, bottom, left
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank())
+
+# save plot
+ggsave(p, filename="14122021.jpg")
 
