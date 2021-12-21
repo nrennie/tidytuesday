@@ -42,12 +42,12 @@ p <- ggplot() +
   theme_void() +
   labs(title="What gives the biggest caffeine fix at Starbucks?", 
        caption = "N.Rennie | Data: Starbucks Coffee Company", 
-       subtitle = "*based on whole milk with no whip") +
+       subtitle = "*averaged across milk options with no whip") +
   guides(colour = guide_colourbar(title.position="top", title.hjust = 0.5, direction = "horizontal")) +
   theme(plot.background = element_rect(fill = "white", colour="white"),
         panel.background = element_rect(fill = "white", colour="white"),
-        plot.title = element_text(colour = "#00704A", size=12, family="sans", hjust=1.1, vjust=0),
-        plot.subtitle = element_text(colour = "#00704A", size=12, face="italic", family="sans", hjust=2.0,
+        plot.title = element_text(colour = "#00704A", size=12, family="sans", hjust=1.05, vjust=0),
+        plot.subtitle = element_text(colour = "#00704A", size=12, face="italic", family="sans", hjust=1.2,
                                      margin = margin(15,2,2,2)),
         plot.caption = element_text(colour = "#00704A", size=10, family="sans", hjust=1.6, 
                                     margin = margin(15,2,2,2)),
