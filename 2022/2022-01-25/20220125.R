@@ -136,3 +136,64 @@ q
 dev.new(noRStudioGD = T, width = 8*1.3, height = 6*1.3, unit = "in")
 
 
+#############################################################################################
+#############################################################################################
+
+
+plot_data1 <- left_join(ratings1, details1, by = "id") %>%
+  filter(!is.na(yearpublished), 
+         yearpublished > 1800) 
+sqrt_games <- floor(sqrt(nrow(plot_data)))
+plot_data <- plot_data1 %>% 
+  mutate(decade = as.character(yearpublished - yearpublished %% 10)) %>% 
+  mutate(group = 1:nrow(plot_data1)) 
+plot_data$new_name <- separate(plot_data, name, into= c("new_name", "ex"), sep=":")$new_name
+# prep plot
+gen_square <- function(x, y, height, group){
+  tibble(x = c(x, x+height, x+height, x),
+         y = c(y, y, y+height, y+height),
+         group = rep(group, 4))
+}
+squares <- tibble(expand.grid(x = 1:sqrt_games, y = 1:sqrt_games))
+squares$heights <- rep(0.9, (sqrt_games^2))
+plot_grid <- tibble(x = c(),
+                    y = c(),
+                    group = c(),
+                    col = c())
+n <- nrow(squares)
+for (i in 1:n){
+  k <- gen_square(x = squares$x[i],
+                  y = squares$y[i],
+                  height = squares$heights[i],
+                  group = i)
+  plot_grid <- rbind(plot_grid, k)
+}
+# join grid to data
+final_data <- left_join(plot_grid, plot_data, by = "group")
+# plot 
+p <- ggplot() + 
+  geom_polygon(data = final_data, 
+               mapping = aes(x = x, y = y, group = group, fill = decade, colour = average), 
+               size = 0.1) +
+  scale_color_gradient(low = "black", high = "white", limits = c(1,10), guide = "none") +
+  coord_fixed(expand = F) +
+  theme_void() +
+  theme(plot.background = element_rect(fill = "black", colour="black"),
+        panel.background = element_rect(fill = "black", colour="black"),
+        plot.title = element_text(colour = "white", size=36, hjust = 0.5, family="bangers", 
+                                  margin = margin(0, 0, 10, 0)),
+        plot.subtitle = element_text(colour = "white", size=12, hjust = 0.5, family="saira"),
+        plot.caption = element_text(colour = "white", size=10, hjust = 0.5, family="saira"),
+        legend.text = element_text(colour = "white", size=10, hjust = 0.5, family="saira"),
+        legend.title = element_blank(),
+        legend.position = "none",
+        axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank(),
+        plot.margin = unit(c(0.1, 0.1, 0.1, 0.1), "cm"), #top, right, bottom, left
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank())
+p
+
+ggsave(p, filename = "2022/2022-01-25/all_games.jpg", width = 16, height = 16, unit = "in")
+
