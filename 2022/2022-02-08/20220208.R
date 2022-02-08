@@ -50,6 +50,7 @@ p <- ggplot(data = plot_data,
        y = "", 
        subtitle = str_wrap_break("The Tuskegee Airmen were the first African-American military aviators in the United States Armed Forces. This plot shows the cumulative number graduates of each rank. Only William H. Shannon and Benjamin O. Davis. Jr graduated with the rank of Captain.\n\nN. Rennie | Data: Tuskegee Airmen Challenge", 60)) +
   coord_cartesian(expand = F) +
+  scale_y_continuous(breaks = c(250, 500, 750, 1000), limits = c(0, 1000),position = "right") +
   scale_fill_carto_d(palette = "Antique") +
   theme(plot.background = element_rect(fill = "gray90", colour="gray90"),
         panel.background = element_rect(fill = "gray90", colour="gray90"),
@@ -58,11 +59,11 @@ p <- ggplot(data = plot_data,
         legend.title = element_blank(),
         legend.key = element_rect(fill = "gray90", colour = "gray90"),
         axis.ticks = element_blank(),
-        plot.margin = unit(c(-3, 0, 0, 0), "cm"), #top, right, bottom, left
+        plot.margin = unit(c(-3, 0, 0, 0.5), "cm"), #top, right, bottom, left
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(), 
         axis.text =  element_text(colour = "black", size=14, hjust = 0.5, family="rose"),
-        axis.text.y = element_blank(),
+        axis.text.y.right = element_text(vjust = -0.7, size=12, margin = margin(l = -42), face = "italic"),
         axis.text.x = element_text(hjust = -0.7, margin = margin(t = -30)),
         legend.text = element_text(colour = "black", size=12, hjust = 0, family="rose"),
         plot.title = element_text(colour = "black", size=26, face = "bold", hjust = 0, vjust = -15, family="rose", margin = margin(10, 0, 20, 0)),
