@@ -3,7 +3,7 @@ library(showtext)
 library(cowplot)
 
 # load data
-df <- readr::read_csv("2022/data/07.csv")
+df <- readr::read_csv("2022/2022-02-15/07.csv")
 
 # load fonts
 font_add_google(name = "Space Mono", family = "space")
