@@ -30,7 +30,7 @@ plot_data <- left_join(africa_data, plot_2020, by = "country")
 # plot 
 ggplot(plot_data, aes(x = year, y = PR.x, fill = as.character(PR.y))) +
   geom_area() +
-  facet_geo(~ country, grid = africa_countries_grid1) +
+  facet_geo(~ country, grid = africa_countries_grid1, label = "code") +
   scale_x_continuous(limits = c(1995, 2020), breaks = c(2000, 2020)) +
   scale_y_continuous(limits = c(0, 10), breaks = c(0, 5, 10)) +
   coord_cartesian(expand = F) +
@@ -50,7 +50,7 @@ ggplot(plot_data, aes(x = year, y = PR.x, fill = as.character(PR.y))) +
                                      margin = margin(0, 0, 30, 0)), 
         plot.caption = element_text(colour = "black", size=10, hjust = 0.5, family="space", 
                                      margin = margin(5, 0, 5, 0)), 
-        strip.text = element_text(colour = "black", size=7, hjust = 0.5, family="space"), 
+        strip.text = element_text(colour = "black", size=9, hjust = 0.5, family="space"), 
         strip.background = element_rect(fill = "#dfd3c2", colour="#dfd3c2"), 
         plot.margin = unit(c(0.3, 0.9, 0.3, 0.3), "cm"), 
         legend.background = element_rect(fill = "#dfd3c2", colour="#dfd3c2"), 
