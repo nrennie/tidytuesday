@@ -1,12 +1,7 @@
 library(tidyverse)
 library(usefunc)
-library(countrycode)
-library(circlize)
 library(showtext)
-library(Polychrome)
-library(cowplot)
-library(ggplotify)
-library(grid)
+library(emojifont)
 
 # get data
 tuesdata <- tidytuesdayR::tt_load('2022-03-08')
@@ -16,62 +11,47 @@ erasmus <- tuesdata$erasmus
 font_add_google(name = "Bodoni Moda", family = "Bodoni MT")
 showtext_auto()
 
-# get list of all countries either receive or send
-countries <- erasmus %>% 
-  select(sending_country_code, receiving_country_code) %>% 
-  unique()
-df_c <- data.frame(country_c = unique(c(countries$sending_country_code, 
-                                        countries$receiving_country_code)))
-# get continent
-df_c$continent <- countrycode(sourcevar = df_c[, "country_c"],
-                              origin = "iso2c",
-                              destination = "continent")
-df_c$continent[which(df_c$country_c %in% c("EL", "UK", "XK"))] <- c("Europe", "Europe", "Europe")
-
-# arrange by continent
-df_sort <- df_c %>% 
-  as_tibble() %>% 
-  arrange(continent, country_c)
-
 # prep data
-plot_data_asia <- erasmus %>% 
-  select(sending_country_code, receiving_country_code) %>% 
-  group_by(sending_country_code, receiving_country_code) %>% 
-  summarise(n = n()) %>% 
-  left_join(df_c, by = c("sending_country_code" = "country_c")) %>% 
-  rename(sending_continent = continent) %>% 
-  left_join(df_c, by = c("receiving_country_code" = "country_c")) %>% 
-  rename(receiving_continent = continent) %>% 
-  filter(.data$sending_country_code != receiving_country_code, 
-         sending_continent == "Asia") %>% 
-  arrange(receiving_continent) %>% 
-  mutate(from = factor(sending_country_code, levels = unique(sending_country_code)), 
-         to = factor(receiving_country_code, levels = unique(receiving_country_code))) %>% 
+plot_data <- erasmus %>% 
+  select(academic_year, fewer_opportunities, participants) %>% 
+  group_by(academic_year, fewer_opportunities) %>% 
+  summarise(n = sum(participants, na.rm = T)) %>% 
   ungroup() %>% 
-  rename(value = n) %>% 
-  select(from, to, value)
-  
-# choose colours
-length(unique(c(plot_data_asia$from, plot_data_asia$to))) #36
-data(palette36)
+  group_by(academic_year) %>% 
+  mutate(year_n = sum(n), 
+         year_perc = round(100*n/year_n))
 
-# make chord diagram
-chordDiagram(plot_data_asia, grid.col = palette36)
+# prep waffle data
+waffle_data <- rep_df(expand.grid(x = rep(1:10), y = rep(1:10)), length(unique(plot_data$academic_year))) %>%
+  mutate(year = rep(unique(plot_data$academic_year), each = 100),
+         label = fontawesome('fa-graduation-cap'),
+         type = rep(plot_data$fewer_opportunities, times = plot_data$year_perc))
 
-# add ggplot2 themes
-p <- recordPlot()
-as.ggplot(ggdraw(p)) +
-  labs(title="Erasmus: Where do students from Asian countries go?",
-       subtitle="jdsjadk",
-       caption="N. Rennie | Data: Data.Europa")+
-  theme(panel.background = element_rect(fill = "gray97", colour="gray97"),
-        plot.background = element_rect(fill = "gray97", colour="gray97"),
+# facet plot
+ggplot() +
+  geom_text(data = waffle_data,
+            mapping = aes(x = x,
+                          y = y,
+                          label = label,
+                          colour = type),
+            family='fontawesome-webfont', size = 4) +
+  facet_wrap(~year, nrow = 1) +
+  scale_colour_manual("", values = c("#d3d3d3", "#673eb7")) +
+  labs(title = str_wrap_break("Erasmus: what % of students are from backgrounds with fewer opportunities?", 75),
+       subtitle = str_wrap_break("The percentage of students from backgrounds with fewer opportunities participating in the Erasmus exchange programme peaked at 21% in the 2016-2017 academic year.\n\nN. Rennie | Data: Data.Europa\n\n", 120),
+       x = "",
+       y = "") +
+  theme_minimal() +
+  theme(panel.spacing = unit(2, "lines"),
+        panel.background = element_rect(fill = "#e7e7e7", colour = "#e7e7e7"),
+        plot.background = element_rect(fill = "#e7e7e7", colour = "#e7e7e7"),
         legend.position="none",
-        axis.title= element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
+        strip.background =element_rect(fill="#e7e7e7", colour ="#e7e7e7"),
+        strip.text = element_text(colour = '#404040', family="Bodoni MT", size=12),
+        plot.title = element_text(colour = "#404040", size=26, hjust = 0, family="Bodoni MT"),
+        plot.subtitle = element_text(colour = "#404040", size=12, hjust = 0, family="Bodoni MT"),
+        plot.margin = unit(c(0.5, 0.8, 0.5, 0.5), "cm"),
         panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank())
-
-ggsave("20220308.jpg", height=7, width=7, unit = "in")
+        panel.grid.minor = element_blank(),
+        axis.text = element_blank())
 
