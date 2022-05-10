@@ -4,7 +4,7 @@ library(dplyr)
 library(tidyr)
 library(rcartocolor)
 library(showtext)
-library(usefunc)
+library(usefunc) 
 
 # load fonts
 font_add_google(name = "Red Rose", family = "rose")
