@@ -2,7 +2,6 @@ library(tidyverse)
 library(showtext)
 
 # load fonts
-font_add_google(name = "Gravitas One", family = "gravitas")
 font_add_google(name = "Ubuntu", family = "ubuntu")
 showtext_auto()
 
@@ -43,15 +42,14 @@ ggplot(data = eurovision_data,
   scale_y_reverse(breaks = c(1, 0.5, 0), labels = c(0, "50%", "100%")) +
   scale_fill_manual(values = cols_choice, 
                     na.value = "#565656") +
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) +
-  theme(axis.text.x = element_text(colour = cols_choice, hjust = 0.5, size = 14, face = "bold"), 
+  theme(axis.text.x = element_text(colour = cols_choice, hjust = 0.5, size = 13, face = "bold"), 
         legend.position = "none", 
         panel.background = element_rect(fill = "black", colour = "black"),
         plot.background = element_rect(fill = "black", colour = "black"), 
         axis.ticks = element_blank(), 
         panel.grid = element_blank(),
-        plot.margin = unit(c(0.5, 1.7, 0.5, 0.5), "cm"), 
-        plot.title = element_text(hjust = 0.5, family = "gravitas", size = 36, colour = "white"), 
+        plot.margin = unit(c(0.5, 1.9, 0.5, 0.5), "cm"), 
+        plot.title = element_text(hjust = 0.5, family = "ubuntu", size = 36, colour = "white"), 
         plot.subtitle = element_text(hjust = 0.5, family = "ubuntu", size = 13, colour = "white", 
                                      margin = margin(t = 10, b = 20)), 
         plot.caption = element_text(hjust = 0.5, family = "ubuntu", size = 12, colour = "white", 
