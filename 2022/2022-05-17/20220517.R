@@ -2,7 +2,7 @@ library(tidyverse)
 library(showtext)
 
 # load fonts
-font_add_google(name = "Bungee Shade", family = "bungee")
+font_add_google(name = "Gravitas One", family = "gravitas")
 font_add_google(name = "Ubuntu", family = "ubuntu")
 showtext_auto()
 
@@ -24,6 +24,9 @@ eurovision_data <- eurovision_votes %>%
 eurovision_data$to_country[!eurovision_data$to_country %in% c("France", "Germany", "Italy", "Spain", "United Kingdom")] = -999
 eurovision_data$to_country_new = factor(eurovision_data$to_country, exclude = -999)
 
+# save as CSV
+write.csv(eurovision_data, "eurovision.csv")
+
 #choose colours
 cols_choice = c("#FF10F0", "#0062FF", "#FFFF00", "#00FF33", "#CC00FF")
 
@@ -33,8 +36,8 @@ ggplot(data = eurovision_data,
   geom_col(position = "fill", width = 0.7) +
   labs(x = "", 
        y = "Percentage of total votes", 
-       title = "Eurovision", 
-       subtitle = str_wrap(" Five countries, alongside the host country, automatically qualify for Eurovision each year - but who do they give their points to? Around 20% of points given from the `Big 5` have been given to other members of the `Big 5`, although the United Kingdom doesn't follow the trend quite so much.", 80), 
+       title = "EUROVISION", 
+       subtitle = str_wrap("Five countries, alongside the host country, automatically qualify for Eurovision each year - but who do they give their points to? Around 20% of points given from the `Big 5` have been given to other members of the `Big 5`, although the United Kingdom doesn't follow the trend quite so much.", 80), 
        caption = "N. Rennie | Data: Eurovision") +
   coord_cartesian(expand = F) +
   scale_y_reverse(breaks = c(1, 0.5, 0), labels = c(0, "50%", "100%")) +
@@ -47,9 +50,9 @@ ggplot(data = eurovision_data,
         plot.background = element_rect(fill = "black", colour = "black"), 
         axis.ticks = element_blank(), 
         panel.grid = element_blank(),
-        plot.margin = unit(c(0.5, 0.7, 0.5, 0.5), "cm"), 
-        plot.title = element_text(hjust = 0.5, family = "bungee", size = 40, colour = "white"), 
-        plot.subtitle = element_text(hjust = 0.5, family = "ubuntu", size = 12, colour = "white", 
+        plot.margin = unit(c(0.5, 1.7, 0.5, 0.5), "cm"), 
+        plot.title = element_text(hjust = 0.5, family = "gravitas", size = 36, colour = "white"), 
+        plot.subtitle = element_text(hjust = 0.5, family = "ubuntu", size = 13, colour = "white", 
                                      margin = margin(t = 10, b = 20)), 
         plot.caption = element_text(hjust = 0.5, family = "ubuntu", size = 12, colour = "white", 
                                      margin = margin(t = 10)), 
