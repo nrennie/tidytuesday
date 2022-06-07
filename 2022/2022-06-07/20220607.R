@@ -57,7 +57,7 @@ p1 <- ggplot() +
         plot.title = element_blank())
 
 # subtitle
-st <- str_wrap_break("June is Pride month, and many companies start selling rainbow-coloured merchandise to present themselves as LGBTQ+ allies. But many companies who sponsor Pride events, also contribute to anti-LGBTQ+ campaigns and politcians. The six largest donors alone contributed over $1.2 million. Toyota are the largest donors to anti-LGBTQ+ campaigns and, in contrast to other companies, these donations are concentrated to a small number of politicians. \n\n N. Rennie | Data: Data for Progress", 
+st <- str_wrap_break("June is Pride month, and many companies start selling rainbow-coloured merchandise to present themselves as LGBTQ+ allies. But many companies who sponsor Pride events, also contribute to anti-LGBTQ+ campaigns and politicians. The six largest donors alone contributed over $1.2 million. Toyota are the largest donors to anti-LGBTQ+ campaigns and, in contrast to other companies, these donations are concentrated to a small number of politicians. \n\n N. Rennie | Data: Data for Progress", 
                      45)
 # title plot
 p2 <- ggplot() +
