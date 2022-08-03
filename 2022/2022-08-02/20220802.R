@@ -11,7 +11,7 @@ font_add_google("Bubbler One", "bubbler")
 showtext_auto()
 
 # read data
-frog <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-08-02/frog.csv')
+frog <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-08-02/frogs.csv')
 
 # sort structures
 struc_levs <- frog %>% 
@@ -58,7 +58,7 @@ ggplot(plot_data,
   labs(title = "OREGON SPOTTED FROG", 
        subtitle = st, 
        x = "", 
-       y = "\nNumber of frogs observed") +
+       y = "\nNumber of observations") +
   scale_fill_carto_d(palette = "Antique") +
   theme(legend.position = "top", 
         legend.title = element_blank(), 
