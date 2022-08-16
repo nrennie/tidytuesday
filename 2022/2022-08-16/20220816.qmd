@@ -1,0 +1,359 @@
+---
+title: TidyTuesday
+format: html
+---
+
+## Villanelle
+
+```{r}
+#| label: villanelle
+#| dpi: 300
+#| fig.height: 7.2
+#| fig.width: 3.6
+#| dev: "png"
+#| echo: false
+#| warning: false
+#| message: false
+library(tidyverse)
+library(ggimage)
+library(showtext)
+library(stringr)
+library(cowplot)
+
+# load data
+characters <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-08-16/characters.csv')
+psych_stats <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-08-16/psych_stats.csv')
+
+#load font
+font_add_google(name = "Metal Mania", family = "metal")
+font_add_google(name = "Montserrat", family = "montserrat")
+showtext_auto()
+
+# data wrangling ----------------------------------------------------------
+
+# check which questions for each person
+# psych_stats %>% 
+#   filter(char_name %in% c("Villanelle", 
+#                      "Eve Polastri", 
+#                      "Carolyn Martens")) %>% 
+#   group_by(question, personality) %>% 
+#   summarise(n = n()) %>% 
+#   filter(n == 3) %>% 
+#   print(n = 150)
+
+# get scores
+scores <- psych_stats %>% 
+  filter(char_name %in% c("Villanelle", 
+                          "Eve Polastri", 
+                          "Carolyn Martens"),
+         question %in% c("assertive/passive", 
+                         "competent/incompetent", 
+                         "low self esteem/narcissistic", 
+                         "mysterious/unambiguous", 
+                         "genuine/sarcastic", 
+                         "hedonist/monastic", 
+                         "obedient/rebellious")) %>% 
+  select(c(char_id, personality, avg_rating)) %>% 
+  pivot_wider(names_from = "personality", values_from = "avg_rating")
+
+# join
+plot_data <- characters %>% 
+  filter(uni_name == "Killing Eve", 
+         name %in% c("Villanelle", 
+                     "Eve Polastri", 
+                     "Carolyn Martens")) %>% 
+  left_join(scores, by = c("id" = "char_id")) %>% 
+  select(-c(id, uni_id, uni_name, notability, link))
+
+# define coords
+# https://stackoverflow.com/questions/36579767/add-unit-labels-to-radar-plot-and-remove-outer-ring-ggplot2-spider-web-plot-co
+coord_radar <- function (theta = "x", start = 0, direction = 1) {
+  theta <- match.arg(theta, c("x", "y"))
+  r <- if (theta == "x") 
+    "y"
+  else "x"
+  
+  #dirty
+  rename_data <- function(coord, data) {
+    if (coord$theta == "y") {
+      plyr::rename(data, c("y" = "theta", "x" = "r"), warn_missing = FALSE)
+    } else {
+      plyr::rename(data, c("y" = "r", "x" = "theta"), warn_missing = FALSE)
+    }
+  }
+  theta_rescale <- function(coord, x, scale_details) {
+    rotate <- function(x) (x + coord$start) %% (2 * pi) * coord$direction
+    rotate(scales::rescale(x, c(0, 2 * pi), scale_details$theta.range))
+  }
+  
+  r_rescale <- function(coord, x, scale_details) {
+    scales::rescale(x, c(0, 0.4), scale_details$r.range)
+  }
+  
+  ggproto("CordRadar", CoordPolar, theta = theta, r = r, start = start, 
+          direction = sign(direction),
+          is_linear = function(coord) TRUE,
+          render_bg = function(self, scale_details, theme) {
+            scale_details <- rename_data(self, scale_details)
+            
+            theta <- if (length(scale_details$theta.major) > 0)
+              theta_rescale(self, scale_details$theta.major, scale_details)
+            thetamin <- if (length(scale_details$theta.minor) > 0)
+              theta_rescale(self, scale_details$theta.minor, scale_details)
+            thetafine <- seq(0, 2 * pi, length.out = 100)
+            
+            rfine <- c(r_rescale(self, scale_details$r.major, scale_details))
+            
+            # This gets the proper theme element for theta and r grid lines:
+            #   panel.grid.major.x or .y
+            majortheta <- paste("panel.grid.major.", self$theta, sep = "")
+            minortheta <- paste("panel.grid.minor.", self$theta, sep = "")
+            majorr     <- paste("panel.grid.major.", self$r,     sep = "")
+            
+            ggplot2:::ggname("grill", grid::grobTree(
+              ggplot2:::element_render(theme, "panel.background"),
+              if (length(theta) > 0) ggplot2:::element_render(
+                theme, majortheta, name = "angle",
+                x = c(rbind(0, 0.45 * sin(theta))) + 0.5,
+                y = c(rbind(0, 0.45 * cos(theta))) + 0.5,
+                id.lengths = rep(2, length(theta)),
+                default.units = "native"
+              ),
+              if (length(thetamin) > 0) ggplot2:::element_render(
+                theme, minortheta, name = "angle",
+                x = c(rbind(0, 0.45 * sin(thetamin))) + 0.5,
+                y = c(rbind(0, 0.45 * cos(thetamin))) + 0.5,
+                id.lengths = rep(2, length(thetamin)),
+                default.units = "native"
+              ),
+              
+              ggplot2:::element_render(
+                theme, majorr, name = "radius",
+                x = rep(rfine, each = length(thetafine)) * sin(thetafine) + 0.5,
+                y = rep(rfine, each = length(thetafine)) * cos(thetafine) + 0.5,
+                id.lengths = rep(length(thetafine), length(rfine)),
+                default.units = "native"
+              )
+            ))
+          })
+}
+
+
+# plot data for one character
+p_data <- filter(plot_data, name == plot_data$name[1]) %>% 
+  pivot_longer(cols = -c(name, image_link), names_to = "trait", values_to = "score") %>% 
+  mutate(trait = str_to_upper(trait)) %>% 
+  mutate(trait = paste0(trait, "\n", round(score))) %>% 
+  arrange(trait) 
+
+
+# plot --------------------------------------------------------------------
+
+p <- ggplot(p_data, aes(x = trait,
+                   y = score,
+                   group = name))+
+  geom_polygon(fill = "#b70102",
+               colour = "#b70102", 
+               alpha = 0.4) +
+  geom_point(colour = "#b70102",
+             size = 2) +
+  geom_line(data = data.frame(x = rep(p_data$trait, 2),
+                              y = c(rep(0, length(p_data$trait)), rep(100, length(p_data$trait)))),
+            mapping = aes(x = x,
+                          y = y,
+                          group = x),
+            colour = "white",
+            alpha = 0.5)+
+  geom_point(data = data.frame(x=p_data$trait, y=rep(100, length(p_data$trait))),
+             inherit.aes = FALSE, 
+             mapping = aes(x = x,
+                           y = y),
+             colour = "white",
+             size = 2) +
+  geom_image(data = slice(p_data, n = 1),
+             aes(x = 1,
+                 y = -40,
+                 image = paste0("images/", slice(p_data, n = 1) %>% pull(name), "-modified.png")),
+             size = 0.18) +
+  scale_y_continuous(limits = c(-40, 120),
+                     breaks = seq(0, 100, 20))+
+  coord_radar() +
+  labs(x = "", 
+       y = "",
+       title = str_to_upper(slice(p_data, n = 1) %>% pull(name)),
+       caption = "N. Rennie | Data: Open-Source Psychometrics Project") +
+  theme(plot.background = element_rect(fill = "black", colour = "black"),
+        panel.background = element_rect(fill = "black", colour = "black"),
+        panel.grid.major.x = element_blank(),
+        axis.text.x = element_text(colour = "white", family = "montserrat", size = 28, lineheight = 0.2),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid = element_line(colour = "white"),
+        plot.margin=margin(t = 30, b = 30, r = 15, l = 5),
+        plot.title = element_text(colour = "white", hjust = 0.5, family = "metal", size = 68),
+        plot.caption = element_text(colour="white", size = 34, hjust = 0.5, family = "montserrat"),
+  )
+
+# add image
+img <- magick::image_read("logo.png")
+
+ggdraw() + 
+  draw_plot(p) + 
+  theme(plot.background = element_rect(fill = "black", colour = "black")) + 
+  draw_image(img, width = 0.6, x = 0.2, y = 0.35) 
+```
+
+
+## Eve Polastri
+
+```{r}
+#| label: eve
+#| dpi: 300
+#| fig.height: 7.2
+#| fig.width: 3.6
+#| dev: "png"
+#| echo: false
+#| warning: false
+#| message: false
+p_data <- filter(plot_data, name == plot_data$name[2]) %>% 
+  pivot_longer(cols = -c(name, image_link), names_to = "trait", values_to = "score") %>% 
+  mutate(trait = str_to_upper(trait)) %>% 
+  mutate(trait = paste0(trait, "\n", round(score))) %>% 
+  arrange(trait) 
+
+
+# plot --------------------------------------------------------------------
+
+p <- ggplot(p_data, aes(x = trait,
+                   y = score,
+                   group = name))+
+  geom_polygon(fill = "#b70102",
+               colour = "#b70102", 
+               alpha = 0.4) +
+  geom_point(colour = "#b70102",
+             size = 2) +
+  geom_line(data = data.frame(x = rep(p_data$trait, 2),
+                              y = c(rep(0, length(p_data$trait)), rep(100, length(p_data$trait)))),
+            mapping = aes(x = x,
+                          y = y,
+                          group = x),
+            colour = "white",
+            alpha = 0.5)+
+  geom_point(data = data.frame(x=p_data$trait, y=rep(100, length(p_data$trait))),
+             inherit.aes = FALSE, 
+             mapping = aes(x = x,
+                           y = y),
+             colour = "white",
+             size = 2) +
+  geom_image(data = slice(p_data, n = 1),
+             aes(x = 1,
+                 y = -40,
+                 image = paste0("images/", slice(p_data, n = 1) %>% pull(name), "-modified.png")),
+             size = 0.18) +
+  scale_y_continuous(limits = c(-40, 120),
+                     breaks = seq(0, 100, 20))+
+  coord_radar() +
+  labs(x = "", 
+       y = "",
+       title = str_to_upper(slice(p_data, n = 1) %>% pull(name)),
+       caption = "N. Rennie | Data: Open-Source Psychometrics Project") +
+  theme(plot.background = element_rect(fill = "black", colour = "black"),
+        panel.background = element_rect(fill = "black", colour = "black"),
+        panel.grid.major.x = element_blank(),
+        axis.text.x = element_text(colour = "white", family = "montserrat", size = 28, lineheight = 0.2),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid = element_line(colour = "white"),
+        plot.margin=margin(t = 30, b = 30, r = 15, l = 5),
+        plot.title = element_text(colour = "white", hjust = 0.5, family = "metal", size = 68),
+        plot.caption = element_text(colour="white", size = 34, hjust = 0.5, family = "montserrat"),
+  )
+
+# add image
+img <- magick::image_read("logo.png")
+
+ggdraw() + 
+  draw_plot(p) + 
+  theme(plot.background = element_rect(fill = "black", colour = "black")) + 
+  draw_image(img, width = 0.6, x = 0.2, y = 0.35) 
+```
+
+## Carolyn Martens
+
+```{r}
+#| label: carolyn
+#| dpi: 300
+#| fig.height: 7.2
+#| fig.width: 3.6
+#| dev: "png"
+#| echo: false
+#| warning: false
+#| message: false
+p_data <- filter(plot_data, name == plot_data$name[3]) %>% 
+  pivot_longer(cols = -c(name, image_link), names_to = "trait", values_to = "score") %>% 
+  mutate(trait = str_to_upper(trait)) %>% 
+  mutate(trait = paste0(trait, "\n", round(score))) %>% 
+  arrange(trait) 
+
+
+# plot --------------------------------------------------------------------
+
+p <- ggplot(p_data, aes(x = trait,
+                   y = score,
+                   group = name))+
+  geom_polygon(fill = "#b70102",
+               colour = "#b70102", 
+               alpha = 0.4) +
+  geom_point(colour = "#b70102",
+             size = 2) +
+  geom_line(data = data.frame(x = rep(p_data$trait, 2),
+                              y = c(rep(0, length(p_data$trait)), rep(100, length(p_data$trait)))),
+            mapping = aes(x = x,
+                          y = y,
+                          group = x),
+            colour = "white",
+            alpha = 0.5)+
+  geom_point(data = data.frame(x=p_data$trait, y=rep(100, length(p_data$trait))),
+             inherit.aes = FALSE, 
+             mapping = aes(x = x,
+                           y = y),
+             colour = "white",
+             size = 2) +
+  geom_image(data = slice(p_data, n = 1),
+             aes(x = 1,
+                 y = -40,
+                 image = paste0("images/", slice(p_data, n = 1) %>% pull(name), "-modified.png")),
+             size = 0.18) +
+  scale_y_continuous(limits = c(-40, 120),
+                     breaks = seq(0, 100, 20))+
+  coord_radar() +
+  labs(x = "", 
+       y = "",
+       title = str_to_upper(slice(p_data, n = 1) %>% pull(name)),
+       caption = "N. Rennie | Data: Open-Source Psychometrics Project") +
+  theme(plot.background = element_rect(fill = "black", colour = "black"),
+        panel.background = element_rect(fill = "black", colour = "black"),
+        panel.grid.major.x = element_blank(),
+        axis.text.x = element_text(colour = "white", family = "montserrat", size = 28, lineheight = 0.2),
+        axis.text.y = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid = element_line(colour = "white"),
+        plot.margin=margin(t = 30, b = 30, r = 15, l = 5),
+        plot.title = element_text(colour = "white", hjust = 0.5, family = "metal", size = 68),
+        plot.caption = element_text(colour="white", size = 34, hjust = 0.5, family = "montserrat"),
+  )
+
+# add image
+img <- magick::image_read("logo.png")
+
+ggdraw() + 
+  draw_plot(p) + 
+  theme(plot.background = element_rect(fill = "black", colour = "black")) + 
+  draw_image(img, width = 0.6, x = 0.2, y = 0.35) 
+```
+
+
+
