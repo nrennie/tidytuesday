@@ -11,7 +11,7 @@ format: html
 #| fig.height: 7.2
 #| fig.width: 3.6
 #| dev: "png"
-#| echo: false
+#| echo: fenced
 #| warning: false
 #| message: false
 library(tidyverse)
