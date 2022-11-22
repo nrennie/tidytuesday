@@ -1,7 +1,9 @@
 library(tidyverse)
 library(showtext)
 library(camcorder)
+library(viridis)
 library(usefunc)
+library(gghighlight)
 
 # load fonts
 font_add_google("Raleway", "raleway")
@@ -68,7 +70,7 @@ st <- str_wrap_break("The absolute number of museums in each level of deprivatio
 
 # plot
 ggplot() +
-  geom_area(data = plot_data, 
+  geom_line(data = plot_data, 
             mapping = aes(x = year, 
                           y = museums,
                           fill = deprivation)) +
@@ -103,3 +105,63 @@ gg_playback(
   last_image_duration = 12,
   frame_duration = .25
 )
+
+
+# Re-worked version -------------------------------------------------------
+
+# data
+lookup <- plot_data %>% 
+  filter(year == 1960) %>% 
+  select(c(deprivation, museums))
+new_plot_data <- plot_data %>% 
+  left_join(lookup, by = "deprivation") %>% 
+  rename(museums = museums.x,
+         museums_1960 = museums.y) %>% 
+  mutate(change = (100*(museums - museums_1960)/museums_1960)) %>% 
+  select(year, deprivation, change)
+
+# plot text
+cap <- str_wrap_break("* The Index of Multiple Deprivation (IMD) measures the relative deprivation of geographic areas in the UK, aggregating different dimensions (income, employment, education, health, crime, housing, and living environment). The index ranges from 1 (most deprived) to 10 (least deprived).\n\n**In some instances it has been impossible to establish an exact opening or closing date for a museum. In these cases, museums’ opening and closing dates are taken to be the mid point of a specified range of possible dates.\n\nN. Rennie | Data: museweb.dcs.bbk.ac.uk", 175)
+st <- str_wrap_break("The change in the estimated number of open museums since 1960 is significantly lower in areas with higher levels of deprivation.* Since around 2000, the number of open museums has stagnated across all areas, regardless of deprivation index. However, the rate of growth prior to this stagnation is lower in more deprived areas.", 135)
+
+# plot
+ggplot() +
+  geom_line(data = new_plot_data, 
+            mapping = aes(x = year, 
+                          y = change,
+                          colour = deprivation)) +
+  gghighlight(use_direct_label = F) +
+  facet_wrap(~deprivation, nrow = 2) +
+  labs(title = "Are there fewer museums opening in more deprived areas?",
+       x = "", 
+       y = "% change in estimated number of\nopen museums since 1960**",
+       caption = cap, 
+       subtitle = st) +
+  scale_y_continuous(limits = c(0, 300)) +
+  scale_colour_viridis(discrete = TRUE, direction = -1) +
+  coord_cartesian(expand = FALSE) +
+  theme_minimal(base_family = "raleway") +
+  theme(legend.position = "none", 
+        panel.spacing = unit(1, "lines"),
+        plot.title.position = "plot", 
+        plot.caption.position = "plot", 
+        plot.margin = margin(10, 15, 10, 10),
+        plot.caption = element_text(hjust = 0, lineheight = 0.4, size = 16),
+        plot.subtitle = element_text(margin = margin(b = 10), lineheight = 0.4, size = 20),
+        plot.title = element_text(lineheight = 0.4, face = "bold", size = 28),
+        axis.title.y = element_text(margin = margin(r = 10), size = 20, lineheight = 0.4),
+        strip.text = element_text(size = 20),
+        axis.text = element_text(size = 16),
+        plot.background = element_rect(fill = "#fafafa", colour = "#fafafa"),
+        panel.background = element_rect(fill = "#fafafa", colour = "#fafafa"))
+
+# save gif
+gg_playback(
+  name = file.path("2022", "2022-11-22","20221122_2.gif"),
+  first_image_duration = 4,
+  last_image_duration = 12,
+  frame_duration = .25
+)
+
+
+
