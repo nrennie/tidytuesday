@@ -31,7 +31,7 @@ team_data <- wcmatches %>%
 winners <- worldcups %>%
   count(winner) %>%
   arrange(-n) %>%
-  mutate(winner = factor(winner, levels = winners)) %>%
+  mutate(winner = factor(winner, levels = winner)) %>%
   pull(winner)
 
 plot_data <- team_data %>%
@@ -64,7 +64,7 @@ names(col_choices) = c(levels(winners), "Other")
 
 # subtitle
 col_text <- glue::glue("<span style='color:{col_choices[1:9]}'>{names(col_choices)[1:9]}</span>,")
-st <- "Between 1930 and 2018, nine countries have won the Men's Fifa World Cup: <span style='color:#7F3C8D'>Brazil</span>,
+st <- "Between 1930 and 2018, nine countries have won the Men's FIFA World Cup: <span style='color:#7F3C8D'>Brazil</span>,
 <span style='color:#11A579'>Italy</span>,<br><span style='color:#3969AC'>West Germany</span>,
 <span style='color:#F2B701'>Argentina</span>, <span style='color:#E73F74'>France</span>,
 <span style='color:#80BA5A'>Uruguay</span>, <span style='color:#E68310'>England</span>,
@@ -93,7 +93,7 @@ ggplot(data = plot_data,
   scale_x_continuous(breaks = seq(1930, 2018, 8)) +
   scale_y_continuous(limits = c(-80, 80)) +
   scale_fill_manual(values = col_choices) +
-  labs(title = "World Cup Matches 1930 - 2018",
+  labs(title = "FIFA World Cup Matches 1930 - 2018",
        subtitle = st,
        caption = "N. Rennie | Data: FIFA World Cup",
        x = "",
