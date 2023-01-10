@@ -29,7 +29,7 @@ plot_data <- feederwatch |>
 
 # get bg map
 usa_map <- st_as_sf(map("county", plot = FALSE, fill = TRUE))
-usa_map <- subset(counties, grepl("california", counties$ID))
+usa_map <- subset(usa_map, grepl("california", usa_map$ID))
 bb <- st_bbox(usa_map)
 usa_map$label = "Bird sightings in California"
 
