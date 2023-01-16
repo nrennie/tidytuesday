@@ -280,3 +280,63 @@ g <- ggplot() +
 g + 
   transition_manual(year)
 anim_save("2023/2023-01-17/20230117_year.gif")
+
+
+# By year (static) --------------------------------------------------------
+
+# data wrangling
+plot_data <- artists |> 
+  select(year, year, artist_race_nwi, space_ratio_per_page_total) |> 
+  group_by(artist_race_nwi, year) |> 
+  summarise(space = mean(space_ratio_per_page_total)) |> 
+  ungroup() |> 
+  mutate(label = paste0(round(space*100), "%")) |> 
+  drop_na()
+# plot
+ggplot(data = plot_data,
+       mapping = aes(x = year,
+                     y = space,
+                     colour = artist_race_nwi)) +
+  geom_line() +
+  geom_point() +
+  scale_colour_brewer(palette = "Dark2") +
+  scale_x_continuous(limits = c(1925, 2025)) +
+  scale_y_continuous(limits = c(0, 1)) +
+  labs(title = "TAKING UP SPACE IN ART HISTORY",
+       y = "Avg. percentage of page space",
+       caption = "N. Rennie | Data: {arthistory}") +
+  coord_cartesian(expand = FALSE) +
+  theme(plot.background = element_rect(fill = "#dedede", colour = "#dedede"),
+        legend.background = element_rect(fill = "#dedede", colour = "#dedede"),
+        panel.background = element_rect(fill = "#dedede", colour = "#dedede"),
+        strip.background = element_rect(fill = "#dedede", colour = "#dedede"),
+        legend.key = element_rect(fill = "#dedede", colour = "#dedede"),
+        panel.spacing = unit(0, "lines"),
+        strip.text = element_text(size = 32,
+                                  face = "bold",
+                                  family = "legible"),
+        plot.title = element_text(size = 40,
+                                  face = "bold",
+                                  family = "legible",
+                                  margin = margin(t = 10, b = 10)),
+        plot.subtitle = element_text(size = 32,
+                                     family = "legible",
+                                     lineheight = 0.4),
+        plot.caption = element_text(size = 32,
+                                    family = "legible",
+                                    hjust = 0,
+                                    margin = margin(t = 10)),
+        axis.text = element_text(size = 32,
+                                 family = "legible"),
+        legend.text = element_text(size = 32,
+                                   family = "legible",
+                                   lineheight = 0.4),
+        axis.title.y = element_text(size = 32,
+                                    family = "legible",
+                                    lineheight = 0.4),
+        axis.ticks = element_blank(),
+        axis.title.x = element_blank(),
+        plot.title.position = "plot",
+        legend.position = "top",
+        legend.title = element_blank(),
+        plot.margin = margin(10,20,10,10))
