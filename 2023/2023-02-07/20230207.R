@@ -9,8 +9,7 @@ library(glue)
 # load fonts
 font_add_google("Fraunces", "fraunces")
 font_add_google("Commissioner", "commissioner")
-sysfonts::font_add(family = "Font Awesome 6 Brands",
-                   regular = "fonts/Font Awesome 6 Brands-Regular-400.otf")
+font_add(family = "Font Awesome 6 Brands", regular = "Font-Awesome-6-Brands-Regular-400.otf")
 showtext_auto()
 
 # load data
@@ -56,7 +55,7 @@ names(col_choices) = stock_orders
 
 # subtitle
 social = "<span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf099;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>@nrennie35</span><span style='color:white;'>..</span><span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf4f6;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>fosstodon/@nrennie</span><span style='color:white;'>..</span><span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf09b;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>nrennie</span><span style='color:white;'>..</span>"
-st = "Of the 14 tech companies considered, <span style='color: #fb0f01;}'>Adobe Inc.</span> has the<br>highest average daily stock price when the markets<br>opened, after overtaking Netflix in 2021.<br><br>Data: Yahoo Finance"
+st = "In 2022, of 14 tech companies considered, <span style='color: #fb0f01;}'>Adobe Inc.</span> had<br>the highest average daily stock price when the markets<br>opened, after overtaking Netflix in 2021.<br><br>Data: Yahoo Finance"
 cap = glue("{social}<br><br>{st}")
 
 # plot
