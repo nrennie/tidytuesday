@@ -54,7 +54,7 @@ col_choices = c(grey.colors(n = 13, start = 0.1, end = 0.9), "#fb0f01")
 names(col_choices) = stock_orders
 
 # subtitle
-social = "<span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf099;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>@nrennie35</span><span style='color:white;'>..</span><span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf4f6;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>fosstodon/@nrennie</span><span style='color:white;'>..</span><span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf09b;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>nrennie</span><span style='color:white;'>..</span>"
+social = "<span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf099;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>@nrennie35</span><span style='color:white;'>..</span><span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf4f6;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>fosstodon.org/@nrennie</span><span style='color:white;'>..</span><span style='font-family:\"Font Awesome 6 Brands\";color:#fb0f01;'>&#xf09b;</span><span style='color:white;'>.</span><span style='font-family:commissioner;color:#2F4F4F;'>nrennie</span><span style='color:white;'>..</span>"
 st = "In 2022, of 14 tech companies considered, <span style='color: #fb0f01;}'>Adobe Inc.</span> had<br>the highest average daily stock price when the markets<br>opened, after overtaking Netflix in 2021.<br><br>Data: Yahoo Finance"
 cap = glue("{social}<br><br>{st}")
 
