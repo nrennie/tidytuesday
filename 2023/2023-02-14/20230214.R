@@ -37,7 +37,7 @@ gg_record(
 
 # subtitle
 social = "<span style='font-family:\"Font Awesome 6 Brands\";color:#E30B5C;'>&#xf099;</span><span style='color:white;'>.</span><span style='font-family:Commissioner;color:#2F4F4F;'>@nrennie35</span><span style='color:white;'>..</span><span style='font-family:\"Font Awesome 6 Brands\";color:#E30B5C;'>&#xf4f6;</span><span style='color:white;'>.</span><span style='font-family:Commissioner;color:#2F4F4F;'>fosstodon.org/@nrennie</span><span style='color:white;'>..</span><span style='font-family:\"Font Awesome 6 Brands\";color:#E30B5C;'>&#xf09b;</span><span style='color:white;'>.</span><span style='font-family:Commissioner;color:#2F4F4F;'>nrennie</span><span style='color:white;'>..</span>"
-st = "Age gaps beween characters in Hollywood films have generally been decreasing over time. Note that this<br>data includes gender, which always contain the values *man* or *woman*. These values appear to indicate<br>how the characters in each film identify. Some of these values do not match how the actor identifies.<br><br>Data: Data Is Plural"
+st = "Age gaps between characters in Hollywood films have generally been decreasing over time. Note that this<br>data includes gender, which always contain the values **man** or **woman**. These values appear to indicate<br>how the characters in each film identify. Some of these values do not match how the actor identifies.<br><br>Data: Data Is Plural"
 cap = glue("{social}<br><br>{st}")
 
 # plot
