@@ -1,6 +1,7 @@
 library(tidyverse)
 library(lubridate)
 library(showtext)
+library(patchwork)
 library(camcorder)
 library(ggtext)
 library(glue)
@@ -30,7 +31,7 @@ gg_record(
   dir = file.path("2023", "2023-03-28", "recording"), # where to save the recording
   device = "png", # device to use to save images
   width = 5.1, # width of saved image
-  height = 4, # height of saved image
+  height = 4.7, # height of saved image
   units = "in", # units for width and height
   dpi = 300 # dpi to use when saving image
 )
@@ -51,22 +52,31 @@ IANA time zone database. The colours show which time zones are in
 <span style='color:#999933;'>Indian</span>, and 
 <span style='color:#AA4499;'>Pacific</span> zones.<br>Data: IANA tz database<br>"
 social <- nrBrand::social_caption(bg_colour = nr_light)
-caption <- paste0(title, cap, social)
+caption <- paste0(title, cap)
 
 
 # plot
-ggplot() +
+g <- ggplot() +
   geom_sf(data = world,
           colour = nr_dark,
           fill = alpha(nr_mid, 0.3)) +
   geom_sf(data = timezones_sf, size = 0.4,
           mapping = aes(colour = continent)) +
+  ggtext::geom_textbox(data = data.frame(x = -110, y = 93, label = social),
+                       aes(x = x, y = y, label = label),
+                       family = "Commissioner",
+                       size = 7,
+                       fill = NA,
+                       halign = 0,
+                       hjust = 0.5,
+                       valign = 0,
+                       box.colour = NA) +
   geom_sf(data = timezones_sf, size = 1.6,
           pch = 21,
           fill = "transparent",
           mapping = aes(colour = continent)) +
   geom_segment(data = data.frame(x = seq(-180, 180, by = 15)),
-               mapping = aes(x = x, y = -160, xend = x, yend = 100),
+               mapping = aes(x = x, y = -170, xend = x, yend = 100),
                linewidth = 0.2,
                colour = alpha(nr_mid, 0.2)) +
   scale_colour_manual(
@@ -92,11 +102,49 @@ ggplot() +
     plot.tag = element_textbox_simple(family = "Commissioner",
                                     colour = nr_dark,
                                     hjust = 0,
+                                    maxwidth = grid::unit(200, "pt"),
                                     lineheight = 0.6,
                                     margin = margin(l = 15,
                                                     t = 5,
                                                     b = 10))
   )
+g
+
+# bar plot 
+p_inset <- timezones_sf |> 
+  group_by(continent) |> 
+  summarise(n = n()) |> 
+  st_drop_geometry() |> 
+  ggplot(mapping = aes(x = continent, y = n, fill = continent, label = continent)) +
+  geom_col() + 
+  ggtext::geom_textbox(mapping = aes(hjust = case_when(n > 45 ~ 1,
+                                                       TRUE ~ 0),
+                                     halign = case_when(n > 45 ~ 1,
+                                                       TRUE ~ 0),
+                                     colour = case_when(n > 45 ~ I(nr_light),
+                                                        TRUE ~ I(nr_dark)
+                                       
+                                     )),
+            family = "Commissioner",
+            size = 7,
+            fill = NA,
+            #halign = 0,
+            box.colour = NA,
+            orientation = "left-rotated") +
+  scale_fill_manual(
+    values = c("#CC6677", "#332288", "#DDCC77",
+               "#117733", "#88CCEE", "#882255",
+               "#44AA99", "#999933", "#AA4499")
+  ) +
+  theme_void() +
+  theme(legend.position = "none",
+        plot.background = element_rect(fill = "transparent", colour = "transparent"),
+        panel.background = element_rect(fill = "transparent", colour = "transparent"))
+p_inset
+
+
+g + inset_element(p_inset, 0.55, 0, 1, 0.3) &
+  theme(plot.margin = margin(0,0,0,0))
 
 # save gif
 gg_playback(
