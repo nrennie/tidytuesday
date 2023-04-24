@@ -10,8 +10,6 @@ library(LondonMarathon)
 
 # read in data
 nicola_lm <- readr::read_csv("2023/2023-04-25/data/nicola_london_marathon.csv")
-london_marathon
-
 
 # start recording
 gg_record(
@@ -37,7 +35,7 @@ social <- nrBrand::social_caption(
 cap <- "Since the first London Marathon in 1981, the number of people 
 applying for a place in the race has drastically increased - especially
 in recent years. Over 450, 000 people applied for the 2020 race, which
-ending up taking place with only elite athletes due to Covid-19.<br><br>Data: Wikipedia via {LondonMarathon}"
+ended up taking place with only elite athletes due to Covid-19.<br><br>Data: Wikipedia via {LondonMarathon}"
 st <- paste(cap, "<br><br>", social)
 
 # background plot
