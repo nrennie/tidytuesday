@@ -1,11 +1,9 @@
 library(tidyverse)
 library(lubridate)
 library(showtext)
-library(patchwork)
 library(camcorder)
 library(ggtext)
 library(glue)
-library(ggragged)
 library(nrBrand)
 library(ggmagnify)
 
