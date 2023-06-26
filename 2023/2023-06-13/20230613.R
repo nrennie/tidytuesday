@@ -17,7 +17,6 @@ showtext_auto()
 safi_data <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2023/2023-06-13/safi_data.csv")
 
 # prep data
-
 plot_data <- safi_data %>%
   select(items_owned) %>%
   mutate(total = nrow(.)) %>%
