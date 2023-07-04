@@ -155,7 +155,7 @@ ggplot() +
        caption = cap,
        tag = glue::glue("Almost <span style='color:{highlight_col}'>{overall_data}%</span> of historical markers in the USA
                       have been reported or confirmed missing. This relates to a total of <span style='color:{highlight_col}'>
-                     {sum(!is.na(historical_markers$missing))}</span> objects.")) +
+                     {sum(!is.na(historical_markers$missing))}</span> markers.")) +
   theme_void(base_size = 44, base_family = "Commissioner") +
   theme(
     legend.position = "none",
