@@ -207,8 +207,8 @@ for (i in 1:nrow(plot_data)) {
 # save gif
 gg_playback(
   name = file.path("2023", "2023-07-11", "20230711-animation.gif"),
-  first_image_duration = 4,
-  last_image_duration = 20,
+  first_image_duration = 1,
+  last_image_duration = 5,
   frame_duration = .1,
   background = bg_col,
   image_resize = 1950
