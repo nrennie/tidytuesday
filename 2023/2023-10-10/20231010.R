@@ -104,7 +104,7 @@ social <- nrBrand::social_caption(
 )
 title <- "Los Angeles"
 st <- "Los Angeles is the most haunted city in the United States, with 60
-locations listed as haunted places in the Shadowlands Haunted Places Index.<br>
+entries listed for haunted places in the Shadowlands Haunted Places Index.<br>
 **Data**: The Shadowlands Haunted Places Index | OpenStreetMap"
 cap <- glue(
   "*\"{plot_data$description[20]}\"*<br><br>{social}"
