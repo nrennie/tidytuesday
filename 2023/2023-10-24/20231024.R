@@ -56,6 +56,7 @@ plot(1:10, Kwss, type = "b",
 # choose k = 4
 
 # final clustering
+set.seed(123)
 kpres <- kproto(cluster_data, k = 4, nstart = 5)
 patient_risk_profiles$cluster <- kpres$cluster
 
@@ -268,7 +269,7 @@ profile_plot <- function(
       data = data.frame(),
       mapping = aes(x = 0, y = 0, label = fontawesome("fa-user")),
       family = "fontawesome-webfont",
-      size = 180,
+      size = 170,
       colour = colour
     ) +
     geom_category(
