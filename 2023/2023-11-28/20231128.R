@@ -1,4 +1,3 @@
-
 # Load packages -----------------------------------------------------------
 
 library(tidyverse)
@@ -8,11 +7,15 @@ library(camcorder)
 library(ggtext)
 library(nrBrand)
 library(glue)
+library(ggalt)
 
 
 # Load data ---------------------------------------------------------------
 
 tuesdata <- tidytuesdayR::tt_load("2023-11-28")
+drwho_episodes <- tuesdata$drwho_episodes
+drwho_directors <- tuesdata$drwho_directors
+drwho_writers <- tuesdata$drwho_writers
 
 
 # Load fonts --------------------------------------------------------------
@@ -23,9 +26,9 @@ showtext_auto()
 
 # Define colours and fonts-------------------------------------------------
 
-bg_col <- ""
-text_col <- ""
-highlight_col <- ""
+bg_col <- "#dedede"
+text_col <- "gray20"
+highlight_col <- "#003B6F"
 
 body_font <- "roboto"
 title_font <- "roboto"
@@ -33,6 +36,18 @@ title_font <- "roboto"
 
 # Data wrangling ----------------------------------------------------------
 
+# remake previous chart
+plot_data <- drwho_episodes |>
+  group_by(season_number) |>
+  summarise(
+    min_viewers = min(uk_viewers),
+    max_viewers = max(uk_viewers)
+  ) |>
+  drop_na() |>
+  mutate(season_number = factor(season_number,
+    levels = 1:13,
+    labels = paste(rep("Season", 13), 1:13)
+  ))
 
 
 # Start recording ---------------------------------------------------------
@@ -55,29 +70,93 @@ social <- nrBrand::social_caption(
   font_colour = text_col,
   font_family = body_font
 )
-title <- ""
-st <- ""
+title <- "Who is watching Doctor Who?"
+st <- "The number of people watching the revival of Doctor Who has been steadily
+declining in recent years. On Christmas Day 2007, Voyage of the Damned became
+the most watched episode with 13.3 million people tuning in. Jodie Whittaker's
+first series as the Doctor brought back an increase in viewership."
 cap <- paste0(
-  "**Data**: <br>", social
+  "**Data**: {datardis}<br>**Graphic**: ", social
 )
 
 
 # Plot --------------------------------------------------------------------
 
-
-theme(
-  plot.margin = margin(5, 5, 5, 5),
-  plot.background = element_rect(fill = bg_col, colour = bg_col),
-  panel.background = element_rect(fill = bg_col, colour = bg_col),
-  plot.caption = element_textbox_simple(
-    colour = text_col,
-    hjust = 0.5,
-    halign = 0.5,
-    margin = margin(b = 10, t = 10),
-    lineheight = 0.5,
-    family = body_font
+ggplot() +
+  geom_dumbbell(
+    data = plot_data,
+    mapping = aes(x = min_viewers, 
+                  xend = max_viewers, 
+                  y = season_number),
+    colour_x = highlight_col,
+    colour_xend = highlight_col,
+    color = alpha(text_col, 0.5),
+    size = 1,
+    size_x = 3,
+    size_xend = 3
+  ) +
+  # Text labels
+  geom_text(
+    data = filter(plot_data, season_number == "Season 13"),
+    mapping = aes(x = min_viewers, 
+                  y = 13.5,
+                  label = "Min"),
+    family = body_font,
+    size = 7
+  ) +
+  geom_text(
+    data = filter(plot_data, season_number == "Season 13"),
+    mapping = aes(x = max_viewers, 
+                  y = 13.5,
+                  label = "Max"),
+    family = body_font,
+    size = 7
+  ) +
+  # Other text
+  labs(
+    x = "UK Viewers (millions)",
+    y = "",
+    title = title,
+    subtitle = st,
+    caption = cap
+  ) +
+  theme_minimal(base_size = 24) +
+  theme(
+    plot.margin = margin(5, 10, 5, 10),
+    plot.background = element_rect(fill = bg_col, colour = bg_col),
+    panel.background = element_rect(fill = bg_col, colour = bg_col),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    panel.grid.major.y = element_line(colour = text_col, linewidth = 0.1),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    plot.title = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 10, t = 10),
+      lineheight = 0.5,
+      size = 50,
+      face = "bold",
+      family = body_font
+    ),
+    plot.subtitle = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 10, t = 0),
+      lineheight = 0.5,
+      family = body_font
+    ),
+    plot.caption = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 5, t = 10),
+      lineheight = 0.5,
+      family = body_font
+    )
   )
-)
 
 
 # Save gif ----------------------------------------------------------------
