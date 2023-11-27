@@ -1,4 +1,4 @@
-
+# Plot a TARDIS
 
 base_plot <- ggplot() +
   annotate(
@@ -14,7 +14,7 @@ base_plot <- ggplot() +
     xmin = -0.2,
     ymin = -1,
     xmax = 5.2,
-    ymax = 8.7,
+    ymax = 9.7,
     fill = highlight_col
   ) +
   annotate(
@@ -131,7 +131,7 @@ windows_plot <- base_plot  +
     colour = alpha("white", 0.95)
   ) 
 
-windows_plot +
+windows2_plot <- windows_plot +
   # lines on windows
   geom_segment(
     data = data.frame(
@@ -151,10 +151,101 @@ windows_plot +
     colour = "black"
   ) 
 
-# fix alignment at top
-# add key hole
-# add police box text
-# add circle thing
-# add square with text
-# add thing at top
+details_plot <- windows2_plot +
+  geom_text(
+    data = data.frame(
+      x = c(1, 4.2), y = c(8.85, 8.85), label = c("POLICE", "BOX")
+    ),
+    mapping = aes(x = x, y = y, label = label),
+    colour = "white",
+    size = 12,
+    fontface = "bold"
+  ) +
+  geom_text(
+    data = data.frame(
+      x = 2.7, y = 8.85, label = c("PUBLIC\nCALL")
+    ),
+    mapping = aes(x = x, y = y, label = label),
+    colour = "white",
+    size = 6,
+    lineheight = 0.3,
+    fontface = "bold"
+  ) +
+  annotate(
+    geom = "point",
+    colour = "grey80",
+    x = 2.7,
+    y = 4
+  ) +
+  annotate(
+    geom = "point",
+    colour = "grey80",
+    x = 3.8,
+    y = 5.1,
+    size = 6
+  ) +
+  annotate(
+    geom = "point",
+    colour = "grey20",
+    x = 3.8,
+    y = 5.1,
+    size = 4,
+    pch = 21
+  ) +
+  annotate(
+    geom = "segment",
+    colour = "grey30",
+    x = 2.7,
+    xend = 2.7,
+    y = 5.3,
+    yend = 4.7,
+    linewidth = 1.0
+  )
 
+tardis <- details_plot +
+  annotate(
+    geom = "rect",
+    xmin = 2.2,
+    ymin = 10,
+    xmax = 2.8,
+    ymax = 10.8,
+    fill = "grey90",
+    colour = "grey60"
+  ) +
+  annotate(
+    geom = "rect",
+    xmin = 2.2,
+    ymin = 10,
+    xmax = 2.8,
+    ymax = 10.2,
+    fill = "grey10",
+    colour = "grey10"
+  ) +
+  annotate(
+    geom = "rect",
+    xmin = 2.18,
+    ymin = 10.7,
+    xmax = 2.82,
+    ymax = 10.85,
+    fill = "grey10",
+    colour = "grey10"
+  ) +
+  annotate(
+    geom = "rect",
+    xmin = 0.5,
+    ymin = 4.3,
+    xmax = 1.9,
+    ymax = 5.9,
+    fill = "grey80",
+    colour = "grey80"
+  ) +
+  annotate(
+    geom = "text",
+    x = 1.2,
+    y = 5.1,
+    label = "POLICE TELEPHONE\n\nFREE\nFOR USE OF\nPUBLIC\nADVICE & ASSISTANCE\nOBTAINABLE IMMEDIATELY\nOFFICER & CARS\nRESPOND TO ALL CALLS\n\nPULL TO OPEN",
+    lineheight = 0.3,
+    size = 2
+  ) +
+  theme_void() 
+  

@@ -82,7 +82,7 @@ cap <- paste0(
 
 # Plot --------------------------------------------------------------------
 
-ggplot() +
+main_plot <- ggplot() +
   geom_dumbbell(
     data = plot_data,
     mapping = aes(x = min_viewers, 
@@ -91,9 +91,9 @@ ggplot() +
     colour_x = highlight_col,
     colour_xend = highlight_col,
     color = alpha(text_col, 0.5),
-    size = 1,
-    size_x = 3,
-    size_xend = 3
+    size = 0.9,
+    size_x = 2.5,
+    size_xend = 2.5
   ) +
   # Text labels
   geom_text(
@@ -117,12 +117,12 @@ ggplot() +
     x = "UK Viewers (millions)",
     y = "",
     title = title,
-    subtitle = st,
+    tag = st,
     caption = cap
   ) +
-  theme_minimal(base_size = 24) +
+  theme_minimal(base_size = 24, base_family = body_font) +
   theme(
-    plot.margin = margin(5, 10, 5, 10),
+    plot.margin = margin(5, 10, 5, 200),
     plot.background = element_rect(fill = bg_col, colour = bg_col),
     panel.background = element_rect(fill = bg_col, colour = bg_col),
     plot.title.position = "plot",
@@ -133,17 +133,19 @@ ggplot() +
     plot.title = element_textbox_simple(
       colour = text_col,
       hjust = 0,
-      halign = 0,
-      margin = margin(b = 10, t = 10),
+      halign = -2.7,
+      margin = margin(b = 50, t = 10),
       lineheight = 0.5,
       size = 50,
       face = "bold",
       family = body_font
     ),
-    plot.subtitle = element_textbox_simple(
+    plot.tag.position = c(-0.66, 0.84),
+    plot.tag = element_textbox_simple(
       colour = text_col,
       hjust = 0,
       halign = 0,
+      width = 1.3,
       margin = margin(b = 10, t = 0),
       lineheight = 0.5,
       family = body_font
@@ -151,12 +153,14 @@ ggplot() +
     plot.caption = element_textbox_simple(
       colour = text_col,
       hjust = 0,
-      halign = 0,
-      margin = margin(b = 5, t = 10),
+      halign = -3,
+      margin = margin(b = 5, t = -15),
       lineheight = 0.5,
       family = body_font
     )
   )
+
+main_plot + inset_element(tardis, -1.8, -0.1, 0.45, 1.0)
 
 
 # Save gif ----------------------------------------------------------------
