@@ -81,7 +81,7 @@ st <- "The United Nations Educational, Scientific and Cultural Organization
 (UNESCO) seeks to encourage the identification, protection and preservation 
 of cultural and natural heritage around the world considered to be of outstanding 
 value to humanity. World Heritage sites belong to all the peoples of the world, 
-irrespective of the territory on which they are located. The number of world 
+irrespective of the territory on which they are located. The numbers of world 
 heritage sites in Scandinavian countries have increased between 2004 and 2022."
 cap <- paste0(
   "**Data**: UNESCO World Heritage Sites<br>**Graphic**: ", social
