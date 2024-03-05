@@ -3,7 +3,6 @@
 library(tidyverse)
 library(showtext)
 library(camcorder)
-library(emojifont)
 library(ggtext)
 library(nrBrand)
 library(glue)
