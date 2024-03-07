@@ -96,6 +96,5 @@ all_weeks <- all_weeks |>
   distinct()
 
 # save file
-setwd("../tidytuesday-shiny-app")
 writexl::write_xlsx(all_weeks, "data/all_weeks.xlsx")
 save(all_weeks, file = "data/all_weeks.RData")
