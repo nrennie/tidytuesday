@@ -10,7 +10,6 @@ str_extract_between <- function(x, start, end) {
 }
 
 # get list of all #tidytuesday folders
-setwd("../tidytuesday")
 all_folders <- tibble::tibble(
   folders = list.dirs(path = ".", recursive = TRUE)
 )
