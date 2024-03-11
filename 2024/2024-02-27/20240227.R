@@ -6,6 +6,7 @@ library(camcorder)
 library(ggtext)
 library(nrBrand)
 library(glue)
+library(ggtextcircle) # https://github.com/nrennie/ggtextcircle
 
 
 # Load data ---------------------------------------------------------------
@@ -33,33 +34,6 @@ body_font <- "roboto"
 title_font <- "roboto_slab"
 
 
-# Data wrangling ----------------------------------------------------------
-
-plot_births <- births |>
-  mutate(type = "birth") |>
-  rename(year = year_birth) |>
-  filter(year >= 1900) |>
-  mutate(label = glue("{person} ({str_trim(description)})")) %>%
-  mutate(
-    theta = seq(pi / 4, (7 / 4) * pi, length.out = nrow(.)),
-    x = 6 * cos(theta),
-    y = 6 * sin(theta),
-    angle = 180 + 360 * (theta / (2 * pi))
-  )
-
-plot_deaths <- deaths |>
-  mutate(type = "death") |>
-  rename(year = year_death) |>
-  filter(year >= 1900) |>
-  mutate(label = glue("{person} ({str_trim(description)})")) %>%
-  mutate(
-    theta = seq(pi / 4, (7 / 4) * pi, length.out = nrow(.)),
-    x = 3 * cos(theta),
-    y = 3 * sin(theta),
-    angle = 180 + 360 * (theta / (2 * pi))
-  )
-
-
 # Start recording ---------------------------------------------------------
 
 gg_record(
@@ -83,8 +57,8 @@ social <- nrBrand::social_caption(
 title <- "Take a leap! Births and deaths on February 29<sup>th</sup>"
 st <- glue("February 29 is a leap day (or 'leap year day'), an intercalary date
 added periodically to create leap years in the Julian and Gregorian calendars. 
-Wikpedia lists {nrow(plot_births)}
-<span style='color: {highlight_col};'>births</span> and {nrow(plot_deaths)}
+Wikpedia lists {nrow(dplyr::filter(births, year_birth >= 1900))}
+<span style='color: {highlight_col};'>births</span> and {nrow(dplyr::filter(deaths, year_death >= 1900))}
 <span style='color: #bf812d;'>deaths</span> on a leap day since 1900.")
 cap <- paste0(
   "**Data**: Wikipedia<br>**Graphic**:", social
@@ -94,26 +68,23 @@ cap <- paste0(
 # Plot --------------------------------------------------------------------
 
 ggplot() +
-  geom_text(
-    data = plot_births,
-    mapping = aes(
-      x = x, y = y, angle = angle, label = person
-    ),
-    hjust = 1,
+  geom_textcircle(
+    data = dplyr::filter(births, year_birth >= 1900),
+    mapping = aes(label = person),
+    colour = highlight_col,
+    r = 6,
     family = body_font,
     size = 6,
-    colour = highlight_col
   ) +
-  geom_text(
-    data = plot_deaths,
-    mapping = aes(
-      x = x, y = y, angle = angle, label = person
-    ),
-    hjust = 1,
+  geom_textcircle(
+    data = dplyr::filter(deaths, year_death >= 1900),
+    mapping = aes(label = person),
+    colour = "#bf812d",
+    r = 3,
     family = body_font,
     size = 6,
-    colour = "#bf812d"
   ) +
+  # add title and subtitle
   geom_textbox(
     data = data.frame(x = 0, y = 1.2, label = title),
     mapping = aes(x = x, y = y, label = label),
