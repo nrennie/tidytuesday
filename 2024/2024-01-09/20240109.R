@@ -3,7 +3,6 @@
 
 library(tidyverse)
 library(showtext)
-library(patchwork)
 library(camcorder)
 library(ggtext)
 library(nrBrand)

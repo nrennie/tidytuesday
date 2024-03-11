@@ -2,7 +2,6 @@
 
 library(tidyverse)
 library(showtext)
-library(patchwork)
 library(camcorder)
 library(statebins)
 library(ggtext)
