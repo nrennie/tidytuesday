@@ -21,7 +21,7 @@ font_add_google("Roboto", "roboto")
 font_add_google("Roboto Slab", "roboto_slab")
 sysfonts::font_add(
   family = "Font Awesome 6",
-  regular = "2024/2024-03-05/Font Awesome 6 Free-Solid-900.otf"
+  regular = "fonts/Font Awesome 6 Free-Solid-900.otf"
 )
 showtext_auto()
 
