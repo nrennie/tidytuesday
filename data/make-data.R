@@ -72,7 +72,7 @@ for (i in seq_len(nrow(all_weeks))) {
   all_weeks[i, "img_fpath"] <- tt_imgs[1]
 
   # get all packages used
-  tt_file <- list.files(file.path(tt_week$year, tt_week$week, "/"),
+  tt_file <- list.files(file.path(tt_week$year, tt_week$week),
     pattern = ".R", full.names = TRUE
   )[1]
   all_weeks[i, "code_fpath"] <- tt_file
