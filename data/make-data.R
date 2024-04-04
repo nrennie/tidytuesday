@@ -73,12 +73,17 @@ for (i in seq_len(nrow(all_weeks))) {
 
   # get all packages used
   tt_file <- list.files(file.path(tt_week$year, tt_week$week),
-    pattern = ".R", full.names = TRUE
+    pattern = ".R|.py", full.names = TRUE
   )[1]
   all_weeks[i, "code_fpath"] <- tt_file
-  tt_pkgs <- att_from_rscript(tt_file) |>
-    stringr::str_flatten_comma()
-  all_weeks[i, "pkgs"] <- tt_pkgs
+  if (stringr::str_detect(tt_file, ".R")) {
+    tt_pkgs <- att_from_rscript(tt_file) |>
+      stringr::str_flatten_comma()
+    all_weeks[i, "pkgs"] <- tt_pkgs
+  } else {
+    all_weeks[i, "pkgs"] <- "None"
+  }
+  
 }
 
 # packages to binary variables
@@ -89,7 +94,8 @@ binary_pkgs <- all_weeks |>
   complete(week, pkgs) |>
   mutate(value = replace_na(value, 0)) |>
   unique() |>
-  pivot_wider(names_from = pkgs, values_from = value)
+  pivot_wider(names_from = pkgs, values_from = value) |> 
+  select(-None)
 
 # join
 all_weeks <- all_weeks |>
