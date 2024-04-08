@@ -77,7 +77,7 @@ social <- nrBrand::social_caption(
 )
 st <- "The trend of buying comics based on value speculation crippled the entire 
 comic book industry for over a decade in the late 1990’s and early 2000’s. Here, the top 
-10 most valueable X-Men characters are defined by there average value per issue. The 
+10 most valueable X-Men characters are defined by their average value per issue. The 
 total value of each X-Men team member's total number of issues as reflected by 
 eBay sales in 2022 in which sellers tagged the issue as VG (Very Good) Condition is 
 divided by the total number of issues each X-Men member appeared in between 1963 and 1992."
@@ -103,12 +103,23 @@ ggplot(
       y = ValuePerIssue / 2
     ),
     fill = highlight_col,
-    # width = 0.875
   ) +
   geom_chicklet(
     fill = highlight_col,
     colour = NA,
     radius = grid::unit(5, "mm")
+  ) +
+  geom_text(
+    mapping = aes(
+      x = Name,
+      y = ValuePerIssue - 65,
+      label = paste0("$", round(ValuePerIssue))
+    ),
+    colour = text_col,
+    family = body_font,
+    fontface = "bold",
+    size = 8,
+    hjust = 1
   ) +
   # add images
   geom_image(
@@ -122,7 +133,7 @@ ggplot(
     aes(
       x = 7,
       y = 600,
-      image = "2024/2024-03-19/images/logo.png"
+      image = "2024/images/logo.png"
     ),
     size = 0.5
   ) +
@@ -152,7 +163,6 @@ ggplot(
     axis.text.y = element_text(colour = text_col),
     panel.grid = element_blank()
   )
-
 
 # Save gif ----------------------------------------------------------------
 
