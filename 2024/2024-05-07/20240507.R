@@ -69,10 +69,10 @@ social <- nrBrand::social_caption(
   font_family = body_font
 )
 title <- "Greatest Albums of All Time"
-st <- "**The 500 Greatest Albums of All Time** is a recurring opinion survey and 
-music ranking of the finest albums in history, compiled by the American magazine 
-Rolling Stone. The first list was published in a special issue of the magazine in 
-2003, with an updated edition published in 2020. Here, the top 25 albums from the 
+st <- "**The 500 Greatest Albums of All Time** is a recurring opinion survey and
+music ranking of the finest albums in history, compiled by the American magazine
+Rolling Stone. The first list was published in a special issue of the magazine in
+2003, with an updated edition published in 2020. Here, the top 25 albums from the
 2020 edition are visualised, and coloured based on the album's decade of release."
 cap <- paste0(
   "**Data**: Data is Plural<br>**Graphic**:", social
@@ -123,8 +123,13 @@ ggplot(plot_data) +
   # add legend
   geom_circle(
     data = legend_df,
-    aes(x0 = x, y0 = y, r = 0.2, fill = decade),
-              colour = "black"
+    aes(x0 = x, y0 = y, r = 0.25),
+    fill = "black"
+  ) +
+  geom_circle(
+    data = legend_df,
+    aes(x0 = x, y0 = y, r = 0.1, fill = decade),
+    colour = "black"
   ) +
   geom_textbox(
     data = legend_df,
