@@ -1,5 +1,4 @@
-<h1 align="center"> #TidyTuesday Datasets
- </h1>
+<h1 align="center"> #TidyTuesday Datasets </h1>
 
 <p align="center">
   <img src="/2024/2024-07-02/20240702.png" width="60%">
