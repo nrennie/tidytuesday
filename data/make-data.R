@@ -10,6 +10,22 @@ str_extract_between <- function(x, start, end) {
   return(stringr::str_extract(x, pattern = pattern))
 }
 
+# function to get imports from python scripts
+att_from_pyscript <- function(file) {
+  file_txt <- readLines(file)
+  import_lines <- file_txt[1:(which(file_txt == "")[1] - 1)]
+  output <- character(length = length(import_lines))
+  for (i in 1:length(import_lines)) {
+    if (stringr::str_starts(import_lines[i], "import")) {
+      output[i] <- stringr::str_extract(import_lines[i], "(?<=import )(\\w+)")
+    } else if (stringr::str_starts(import_lines[i], "from")) {
+      output[i] <- stringr::str_extract(import_lines[i], "(?<=from )(\\w+)")
+    }
+  }
+  output <- stringr::str_flatten_comma(output)
+  return(output)
+}
+
 # get list of all #tidytuesday folders
 all_folders <- tibble::tibble(
   folders = list.dirs(path = ".", recursive = TRUE)
@@ -80,8 +96,9 @@ for (i in seq_len(nrow(all_weeks))) {
     tt_pkgs <- att_from_rscript(tt_file) |>
       stringr::str_flatten_comma()
     all_weeks[i, "pkgs"] <- tt_pkgs
-  } else {
-    all_weeks[i, "pkgs"] <- "None"
+  } else if (stringr::str_detect(tt_file, ".py")) {
+    tt_pkgs <- att_from_pyscript(tt_file)
+    all_weeks[i, "pkgs"] <- tt_pkgs
   }
   
 }
@@ -94,8 +111,7 @@ binary_pkgs <- all_weeks |>
   complete(week, pkgs) |>
   mutate(value = replace_na(value, 0)) |>
   unique() |>
-  pivot_wider(names_from = pkgs, values_from = value) |> 
-  select(-None)
+  pivot_wider(names_from = pkgs, values_from = value)
 
 # join
 all_weeks <- all_weeks |>
