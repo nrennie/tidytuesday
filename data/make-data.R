@@ -47,7 +47,8 @@ all_weeks <- all_folders |>
     title = NA_character_,
     pkgs = NA_character_,
     code_fpath = NA_character_,
-    img_fpath = NA_character_
+    img_fpath = NA_character_,
+    code_type = NA_character_
   )
 
 # list file for each week
@@ -86,7 +87,7 @@ for (i in seq_len(nrow(all_weeks))) {
   tt_imgs <- tt_imgs |>
     subset(stringr::str_detect(tt_imgs, stringr::str_remove_all(tt_week$week, "-")))
   all_weeks[i, "img_fpath"] <- tt_imgs[1]
-
+  
   # get all packages used
   tt_file <- list.files(file.path(tt_week$year, tt_week$week),
     pattern = ".R|.py", full.names = TRUE
@@ -96,9 +97,11 @@ for (i in seq_len(nrow(all_weeks))) {
     tt_pkgs <- att_from_rscript(tt_file) |>
       stringr::str_flatten_comma()
     all_weeks[i, "pkgs"] <- tt_pkgs
+    all_weeks[i, "code_type"] <- "R"
   } else if (stringr::str_detect(tt_file, ".py")) {
     tt_pkgs <- att_from_pyscript(tt_file)
     all_weeks[i, "pkgs"] <- tt_pkgs
+    all_weeks[i, "code_type"] <- "Python"
   }
   
 }
