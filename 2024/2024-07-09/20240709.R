@@ -7,8 +7,6 @@ library(ggtext)
 library(nrBrand)
 library(glue)
 library(funspotr)
-library(png)
-library(grid)
 
 
 # Load data ---------------------------------------------------------------
@@ -51,30 +49,48 @@ core_tidyverse <- c(
   "dplyr", "forcats", "ggplot2", "purrr",
   "readr", "stringr", "tibble", "tidyr"
 )
-core_lvls <- glue::glue(
-  "&nbsp;&nbsp;&nbsp;&nbsp;<img src='2024/2024-07-09/hex/{core_tidyverse}.png' width='20'>")
 
-plot_data <- r_pkgs |>
-  mutate(
-    pkgs = case_when(
+r_pkgs_date <- r_pkgs |>
+  dplyr::mutate(
+    pkgs = dplyr::case_when(
       pkgs == "ggplot" ~ "ggplot2",
       TRUE ~ pkgs
     )
-  ) |>
-  filter(pkgs %in% core_tidyverse) |>
-  separate_wider_delim(
+  ) |> 
+  dplyr::filter(pkgs %in% core_tidyverse) |>
+  tidyr::separate_wider_delim(
     relative_paths,
     delim = "/",
     names = c(NA, "date", NA)
   ) |>
-  mutate(date = lubridate::ymd(date)) |>
-  group_by(date, pkgs) |>
-  count() |>
-  ungroup() |>
-  mutate(
+  dplyr::mutate(date = lubridate::ymd(date)) |>
+  dplyr::count(date, pkgs)
+
+pkgs_ordered <- r_pkgs_date |>
+  dplyr::summarise(n = sum(n), .by = pkgs) |>
+  dplyr::arrange(-n) |>
+  dplyr::pull(pkgs)
+
+pkgs_levels <- c(
+  pkgs_ordered,
+  setdiff(core_tidyverse, pkgs_ordered)
+)
+
+new_levels <- glue::glue(
+  "&nbsp;&nbsp;&nbsp;&nbsp;<img src='2024/2024-07-09/hex/{pkgs_levels}.png' width='20'>"
+)
+
+plot_data <- r_pkgs_date |>
+  dplyr::mutate(
     pkgs = glue::glue("&nbsp;&nbsp;&nbsp;&nbsp;<img src='2024/2024-07-09/hex/{pkgs}.png' width='20'>")
+  ) |>
+  dplyr::mutate(
+    pkgs = factor(pkgs, levels = new_levels)
   ) |> 
-  mutate(pkgs = factor(pkgs, levels = core_lvls))
+  tidyr::complete(
+    date, pkgs,
+    fill = list(n = 0)
+  )
 
 
 # Start recording ---------------------------------------------------------
