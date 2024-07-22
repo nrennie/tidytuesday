@@ -33,8 +33,8 @@ title_font <- "Passion One"
 
 # Define colours ----------------------------------------------------------
 
-bg_col <- "#fafafa"
-text_col <- "#00186d"
+bg_col <- "#00186d"
+text_col <- "#fafafa"
 highlight_col <- "#06c7ff"
 
 
@@ -49,7 +49,7 @@ plot_data <- eliminations |>
     ),
     place = as.numeric(place)
   ) |> 
-  filter(place <= 10) |> 
+  filter(place <= 10, season <= 10) |> 
   select(contestant, place) |>
   mutate(
     place = if_else(place == "1", highlight_col, text_col)
@@ -77,8 +77,8 @@ social <- nrBrand::social_caption(
   font_family = body_font
 )
 st <- glue::glue(
-  "All **American Idol** <span style='color: {highlight_col};'>winners</span>
-  and contestants who made the top 10 in each season."
+  "All American Idol <span style='color: {highlight_col};'>winners</span>
+  and contestants who made the top 10 in each of the first 10 seasons."
 )
 cap <- paste0(
   "**Data**: Wikipedia | **Image**: Wikipedia <br>**Graphic**: ", social
@@ -92,6 +92,7 @@ ggplot() +
     data = plot_data,
     mapping = aes(label = contestant, colour = place),
     family = body_font,
+    size = 8,
     r = 4
   ) +
   geom_image(
