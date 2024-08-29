@@ -28,6 +28,7 @@ bg_col <- "#fafafa"
 text_col <- "#472c85"
 highlight_col <- "#d392b3"
 col_palette <- c("#c2321c", "#da872c", "#e8dc3b", "#61b94b", "#2c3bd9", "#472c85")
+col_palette2 <- c("#762a83","#af8dc3","#e7d4e8","#d9f0d3","#7fbf7b","#1b7837")
 
 body_font <- "space"
 title_font <- "space"
@@ -113,6 +114,7 @@ ggplot(data = episode_data) +
   facet_wrap(season_num ~ ., strip.position = "left", ncol = 1) +
   scale_fill_manual(
     values = rev(col_palette),
+    #values = rev(col_palette2),
     name = "Lower IMDb Rating \u2190   \u2192 Higher IMDb Rating"
   ) +
   guides(
