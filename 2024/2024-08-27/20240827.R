@@ -39,14 +39,10 @@ title_font <- "space"
 # Prep episode data
 episode_data <- power_rangers_episodes |>
   left_join(power_rangers_seasons, by = "season_title") |>
-  select(season_num, episode_num, IMDB_rating.x) |>
-  complete(season_num, episode_num) |>
-  mutate(
-    season_num = factor(season_num, levels = 1:27)
-  ) |> 
-  mutate(
-    season_num = fct_recode(season_num, "Season 1" = "1")
-  )
+  mutate(season_name = factor(str_wrap(paste0(season_num, ". ", season_title), 14)),
+         season_name = fct_reorder(season_name, season_num)) |>
+  select(season_name, episode_num, IMDB_rating.x) |>
+  complete(season_name, episode_num)
 
 # Horizon plot cutpoints
 cutpoints <- episode_data |>
@@ -72,7 +68,7 @@ sca <- seq(range(cutpoints$IMDB_rating.x)[1],
 gg_record(
   dir = file.path("2024", "2024-08-27", "recording"),
   device = "png",
-  width = 5,
+  width = 5.2,
   height = 7,
   units = "in",
   dpi = 300
@@ -111,7 +107,7 @@ ggplot(data = episode_data) +
     ),
     origin = ori, horizonscale = sca
   ) +
-  facet_wrap(season_num ~ ., strip.position = "left", ncol = 1) +
+  facet_wrap(season_name ~ ., strip.position = "left", ncol = 1) +
   scale_fill_manual(
     values = rev(col_palette),
     #values = rev(col_palette2),
@@ -129,12 +125,12 @@ ggplot(data = episode_data) +
     plot.margin = margin(5, 5, 5, 5),
     plot.background = element_rect(fill = bg_col, colour = bg_col),
     panel.background = element_rect(fill = bg_col, colour = bg_col),
-    plot.tag.position = c(0.72, 0.135),
+    plot.tag.position = c(0.73, 0.135),
     axis.text.y = element_blank(),
     axis.title.y = element_blank(),
     axis.ticks.y = element_blank(),
     legend.position = "inside",
-    legend.position.inside = c(0.70, 0.31),
+    legend.position.inside = c(0.71, 0.31),
     legend.direction = "vertical",
     legend.text = element_blank(),
     legend.title = element_text(
@@ -144,8 +140,9 @@ ggplot(data = episode_data) +
     legend.key.spacing = unit(0.3, "lines"),
     strip.text = element_text(
       angle = 0, colour = text_col,
-      size = rel(1.2),
+      size = rel(0.9),
       hjust = 1,
+      lineheight = 0.3,
       margin = margin(r = 2)
     ),
     panel.spacing = unit(0.1, "lines"),
