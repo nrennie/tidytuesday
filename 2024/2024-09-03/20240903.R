@@ -119,8 +119,8 @@ title <- "Most developers don't believe AI is a threat to their current job."
 st <- glue("The 2024 Stack Overflow Annual Developer Survey, conducted in May 
 2024, gathered responses from over 65,000 developers. Of those developers who responded with information 
 about their experience level and whether or not they had used AI, 
-<span style='color:{highlight_col};'>developers with less than five years 
-of professional coding experience</span> 
+<span style='color:{highlight_col};'>**developers with less than five years 
+of professional coding experience**</span> 
 are most likely to believe that AI is a threat to their current role with 9.6%
 answering yes to this question. This compares to just 6.4% of developers with 
 over 20 years of experience.")
