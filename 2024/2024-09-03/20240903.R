@@ -100,7 +100,7 @@ gg_record(
   dir = file.path("2024", "2024-09-03", "recording"),
   device = "png",
   width = 7,
-  height = 5,
+  height = 6,
   units = "in",
   dpi = 300
 )
@@ -116,13 +116,13 @@ social <- nrBrand::social_caption(
   twitter = NA
 )
 title <- "Most developers don't believe AI is a threat to their current job."
-st <- glue("The 2024 Stack Overflow Annual Developer Survey, conducted in May 
-2024, gathered responses from over 65,000 developers. Of those developers who responded with information 
-about their experience level and whether or not they had used AI, 
-<span style='color:{highlight_col};'>**developers with less than five years 
-of professional coding experience**</span> 
+st <- glue("The 2024 Stack Overflow Annual Developer Survey, conducted in May
+2024, gathered responses from over 65,000 developers. Of those developers who responded with information
+about their experience level and whether or not they had used AI,
+<span style='color:{highlight_col};'>**developers with less than five years
+of professional coding experience**</span>
 are most likely to believe that AI is a threat to their current role with 9.6%
-answering yes to this question. This compares to just 6.4% of developers with 
+answering yes to this question. This compares to just 6.4% of developers with
 over 20 years of experience.")
 cap <- paste0(
   "**Data**: Stack Overflow Annual Developer Survey 2024<br>**Graphic**: ", social
@@ -155,6 +155,15 @@ ggplot(
   scale_fill_manual(
     values = c(highlight_col, "grey10", "grey40", "grey70")
   ) +
+  scale_x_discrete(
+    limits = c("years_code_pro", "ai_select", "ai_threat"),
+    labels = str_wrap(c(
+      "Not including education, how many years have you coded professional?",
+      "Do you currently use AI tools in your development process?",
+      "Do you believe AI is a threat to your current role?"
+    ), 18),
+    position = "top"
+  ) +
   coord_cartesian(expand = F) +
   theme_void(base_family = body_font, base_size = 22) +
   theme(
@@ -185,6 +194,12 @@ ggplot(
       lineheight = 0.5,
       family = body_font
     ),
+    axis.text.x = element_text(
+      family = body_font,
+      colour = text_col,
+      lineheight = 0.4,
+      margin = margin(b = 5)
+    ),
     plot.margin = margin(10, 10, 10, 10),
     plot.background = element_rect(fill = bg_col, colour = bg_col)
   )
@@ -202,6 +217,6 @@ gg_playback(
 
 ggsave(
   file.path("2024", "2024-09-03", paste0("20240903", ".png")),
-  height = 5, 
+  height = 6,
   width = 7
 )
