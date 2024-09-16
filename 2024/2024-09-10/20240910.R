@@ -81,7 +81,7 @@ social <- nrBrand::social_caption(
 )
 title <- "Economic Diversity and Student Outcomes"
 st <- glue("Higher parental income appears to be somewhat correlated with 
-higher collee acceptance rates, especially at the 
+higher college acceptance rates, especially at the 
 top end of parental income, though variability also increases. 
 Generally, a lower acceptance rate is seen for <span style='color:{col_palette[1]}'>**Ivy League 
 and other elite schools**</span> compared to <span style='color:{col_palette[2]}'>**highly selective**</span> 
