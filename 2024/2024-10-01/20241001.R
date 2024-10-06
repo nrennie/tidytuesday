@@ -103,7 +103,8 @@ ggplot() +
   geom_line(
     data = plot_data,
     mapping = aes(x = player, y = rating, group = game_id),
-    alpha = 0.1
+    alpha = 0.15,
+    colour = highlight_col
   ) +
   geom_half_violin(
     data = filter(plot_data, player == "Black\nplayer"),
