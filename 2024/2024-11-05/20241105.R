@@ -121,6 +121,7 @@ ggplot(
   scale_fill_manual(
     values = col_palette
   ) +
+  scale_x_continuous(limits = c(1949, 2021)) +
   labs(
     title = title,
     subtitle = st,
