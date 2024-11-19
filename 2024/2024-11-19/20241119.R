@@ -79,7 +79,7 @@ gg_record(
 # Define text -------------------------------------------------------------
 
 social <- "<span style='font-family:\"Font Awesome 6 Brands\";color:#ee2631;'>&#xf4f6;</span><span style='color:#f8df20;'>.</span><span style='font-family:Poppins;color:#070606;'>fosstodon.org/@nrennie</span><span style='color:#f8df20;'>...........</span><span style='font-family:\"Font Awesome 6 Brands\";color:#ee2631;'>&#xf08c;</span><span style='color:#f8df20;'>.</span><span style='font-family:Poppins;color:#070606;'>nicola-rennie</span><span style='color:#f8df20;'>........</span><span style='font-family:\"Font Awesome 6 Brands\";color:#ee2631;'>&#xe671;</span><span style='color:#f8df20;'>..</span><span style='font-family:Poppins;color:#070606;'>nrennie</span><span style='color:#f8df20;'>........</span><span style='font-family:\"Font Awesome 6 Brands\";color:#ee2631;'>&#xf09b;</span><span style='color:#f8df20;'>.</span><span style='font-family:Poppins;color:#070606;'>nrennie</span><span style='color:#f8df20;'>..</span>"
-st <- "Bob's Burgers is an American animated sitcom that follows the Belcher family as they run a struggling hamburger restaurant. Across the first ten seasons the number of unique words in each episodes grey slightly."
+st <- "Bob's Burgers is an American animated sitcom that follows the Belcher family as they run a struggling hamburger restaurant. Across the first ten seasons the number of unique words in each episodes grew slightly."
 cap <- paste0(
   "**Data**: {bobsburgersR} <br>**Graphic**:", social
 )
