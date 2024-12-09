@@ -197,8 +197,8 @@ ggplot() +
 
 ggsave(
   filename = file.path("2024", "2024-12-10", paste0("20241210", ".png")),
-  width = 5.2,
-  height = 8
+  width = 8,
+  height = 5.2
 )
 
 gg_playback(
