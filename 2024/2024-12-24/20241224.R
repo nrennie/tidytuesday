@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(showtext)
+library(patchwork)
 library(camcorder)
 library(ggtext)
 library(nrBrand)
@@ -139,6 +140,16 @@ ggplot() +
     fill = "grey60"
   ) +
   geom_col(
+    data = miss_data,
+    mapping = aes(
+      x = factor(Date),
+      y = -log(50000000)
+    ),
+    width = 1,
+    alpha = 0.6,
+    fill = "grey60"
+  ) +
+  geom_col(
     data = plot_data,
     mapping = aes(
       x = factor(Date),
@@ -200,7 +211,7 @@ ggplot() +
       hjust = 0,
       halign = 0,
       margin = margin(b = 10, t = 0),
-      lineheight = 0.5,
+      lineheight = 0.1,
       family = body_font
     ),
     axis.text.x = element_text(size = rel(0.7), margin = margin(t = 2)),
@@ -214,7 +225,8 @@ ggplot() +
 ggsave(
   filename = file.path("2024", "2024-12-24", paste0("20241224", ".png")),
   width = 5,
-  height = 7
+  height = 7,
+  dpi = 300
 )
 
 gg_playback(
