@@ -87,7 +87,7 @@ col_palette <- PrettyCols::prettycols("Disco")[c(1, 3:5)]
 names(col_palette) <- unique(plot_data$Topic)
 
 title <- "Talks and Workshops in 2024"
-st <- glue("During 2024, I delivered {nrow(plot_data)} talks or workshops (excluding lectures) on topics such as <span style='color:{col_palette[2]}'>**{names(col_palette[2])}**</span>, <span style='color:{col_palette[3]}'>**{names(col_palette[3])}**</span>, and <span style='color:{col_palette[4]}'>**{names(col_palette[4])}**</span> as well as <span style='color:{col_palette[1]}'>**{names(col_palette[1])}**</span> topics.")
+st <- glue("During 2024, I delivered {nrow(plot_data)} talks or workshops (excluding lectures) on <span style='color:{col_palette[2]}'>**{names(col_palette[2])}**</span>, <span style='color:{col_palette[3]}'>**{names(col_palette[3])}**</span>, and <span style='color:{col_palette[4]}'>**{names(col_palette[4])}**</span> as well as <span style='color:{col_palette[1]}'>**{names(col_palette[1])}**</span> topics.")
 cap <- paste0(
   "**Graphic**:", social
 )
@@ -115,8 +115,7 @@ p <- ggplot() +
     ),
     alpha = 0.7,
     pch = 21,
-    colour = text_col,
-    linewidth = 0.5
+    colour = text_col
   ) +
   facet_wrap(~month, ncol = 1, drop = FALSE, strip.position = "left") +
   scale_x_continuous(
@@ -189,7 +188,6 @@ p <- ggplot() +
       hjust = 0.5,
       halign = 0.5,
       margin = margin(b = 5, t = 0),
-      lineheight = 0.6,
       family = body_font
     ),
     plot.caption = element_textbox_simple(
@@ -225,7 +223,7 @@ ggdraw(p) +
     size = 8,
     colour = text_col,
     family = body_font,
-    text = "Data viz session &\nNHS-R {tidymodels}\nworkshop"
+    text = "Careers talk &\nNHS-R {tidymodels}\nworkshop"
   ) +
   draw_grob(
     curveGrob(
