@@ -184,8 +184,8 @@ ggplot(
 
 ggsave(
   filename = file.path("2025", "2025-01-28", paste0("20250128", ".png")),
-  height = 5,
-  width = 7,
+  height = 6,
+  width = 6,
   bg = bg_col,
   units = "in",
   dpi = 300
