@@ -161,7 +161,7 @@ ggplot(
       family = title_font,
       colour = text_col,
       hjust = 0,
-      margin = margin(b = -5)
+      margin = margin(b = 1)
     ),
     panel.spacing = unit(0.2, "lines")
   )
