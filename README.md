@@ -1,8 +1,7 @@
-<h1 align="center">
-#TidyTuesday
-</h1>
+# TidyTuesday
 
-TidyTuesday is a weekly data project aimed at the R ecosystem. The project was borne out of the R4DS Online Learning Community and the R for Data Science textbook, with an emphasis on understanding how to summarize and arrange data to make meaningful charts with ggplot2, tidyr, dplyr, and other tools in the tidyverse ecosystem. Check it out at: [github.com/rfordatascience/tidytuesday](https://github.com/rfordatascience/tidytuesday/blob/master/README.md). 
+[TidyTuesday](https://github.com/rfordatascience/tidytuesday/blob/master/README.md) is a weekly social data project organised by the [Data Science Learning Community](https://dslc.io/). This repository contains the R and Python code used to produce my visualisations of TidyTuesday data. You can follow my attempts on [LinkedIn](https://www.linkedin.com/in/nicola-rennie/), [BlueSky](https://bsky.app/profile/nrennie.bsky.social), or [Mastodon](https://fosstodon.org/@nrennie).
 
-This repository contains the code used to produce my visualisations. You can follow my attempts on [Twitter](https://twitter.com/nrennie35), [LinkedIn](https://www.linkedin.com/in/nicola-rennie/), [BlueSky](https://bsky.app/profile/nrennie.bsky.social), or [Mastodon](https://fosstodon.org/@nrennie).
+You can also explore my plots using the Shiny app at [nrennie.rbind.io/tidytuesday-shiny-app](https://nrennie.rbind.io/tidytuesday-shiny-app/). This appdisplays every TidyTuesday plot I’ve created, with functionality to search by packages used in creating the plots and links to the original code and data. It automatically updates whenever I create a new plot.
 
+![](https://nrennie.rbind.io/projects/dashboards/tidytuesday.png)
