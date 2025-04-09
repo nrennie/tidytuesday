@@ -1,0 +1,196 @@
+---
+title: "Timely and Effective Care by US State"
+execute:
+  echo: false
+fig-height: 6
+fig-width: 7
+fig-dpi: 300
+format:
+  html:
+    embed-resources: true
+---
+
+```{r}
+#| message: false
+#| warning: false
+library(tidyverse)
+library(showtext)
+library(camcorder)
+library(ggtext)
+library(nrBrand)
+library(glue)
+library(geofacet)
+library(ggiraph)
+
+
+# Load data ---------------------------------------------------------------
+
+tuesdata <- tidytuesdayR::tt_load("2025-04-08")
+care_state <- tuesdata$care_state
+
+
+# Load fonts --------------------------------------------------------------
+
+font_add_google("Ubuntu")
+showtext_auto()
+showtext_opts(dpi = 300)
+
+
+# Define colours and fonts-------------------------------------------------
+
+bg_col <- "#F9F1F7"
+text_col <- "#1D0C1A"
+highlight_col <- "#833473"
+
+body_font <- "Ubuntu"
+title_font <- "Ubuntu"
+
+
+# Data wrangling ----------------------------------------------------------
+
+plot_data <- care_state |>
+  filter(
+    measure_name == "Percentage of patients who came to the emergency department with stroke symptoms who received brain scan results within 45 minutes of arrival Higher percentages are better",
+    start_date == ymd("2023-04-01"),
+    !(state %in% c("AS", "GU", "MP", "PR", "VI"))
+  ) |>
+  select(state, score)
+
+avg_perc <- plot_data |>
+  summarise(mean = mean(score)) |>
+  pull(mean) |>
+  round()
+
+
+# Start recording ---------------------------------------------------------
+
+gg_record(
+  dir = file.path("2025", "2025-04-08", "recording"),
+  device = "png",
+  width = 7,
+  height = 6,
+  units = "in",
+  dpi = 300
+)
+
+
+# Define text -------------------------------------------------------------
+
+social <- nrBrand::social_caption(
+  bg_colour = bg_col,
+  icon_colour = highlight_col,
+  font_colour = text_col,
+  font_family = body_font
+)
+title <- "How timely and effective is medical care in the US?"
+st <- glue("<span style='color:{highlight_col};'>**Percentage of patients**</span> who came to the emergency department with stroke symptoms who received brain scan results within 45 minutes of arrival, from April 2023 to March 2024. The average across all states is {avg_perc}%.")
+cap <- paste0(
+  "**Data**:  Centers for Medicare and Medicaid Services<br>**Graphic**:", social
+)
+
+
+# Tooltip label -----------------------------------------------------------
+
+tooltip_helper <- function(x, avg) {
+  if (x < avg) {
+    output <- "below"
+  } else if (x == avg) {
+    output <- "equal to"
+  } else if (x > avg) {
+    output <- "above"
+  }
+  return(output)
+}
+
+label_data <- plot_data |>
+  left_join(
+    as.data.frame(geofacet::us_state_grid1[, c(3, 4)]),
+    by = c("state" = "code")
+  ) |>
+  mutate(
+    tooltip_label = glue("{name}: {score}%\nThis is {sapply(plot_data$score, tooltip_helper, avg = avg_perc)} the average of {avg_perc}%."),
+    y = 100
+  )
+
+
+# Plot --------------------------------------------------------------------
+
+g <- ggplot(
+  data = label_data
+) +
+  geom_col(
+    mapping = aes(x = "1", y = score),
+    fill = highlight_col
+  ) +
+  geom_col_interactive(
+    mapping = aes(x = "1", y = y, tooltip = tooltip_label, data_id = state),
+    fill = "#EED3E8",
+    alpha = 0
+  ) +
+  facet_geo(~state) +
+  scale_y_continuous(limits = c(0, 100)) +
+  labs(title = title, subtitle = st, caption = cap) +
+  coord_cartesian(expand = FALSE) +
+  theme_void(base_family = body_font, base_size = 9) +
+  theme(
+    plot.margin = margin(5, 10, 5, 10),
+    legend.position = "none",
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    plot.background = element_rect(fill = bg_col, colour = bg_col),
+    panel.background = element_rect(fill = "#E2B6D9", colour = "#E2B6D9"),
+    plot.title = element_textbox_simple(
+      colour = text_col,
+      hjust = 0.5,
+      halign = 0.5,
+      margin = margin(b = 5, t = 5),
+      lineheight = 0.5,
+      family = title_font,
+      face = "bold",
+      size = rel(1.8)
+    ),
+    plot.subtitle = element_textbox_simple(
+      colour = text_col,
+      hjust = 0.5,
+      halign = 0.5,
+      margin = margin(b = 20, t = 5),
+      family = body_font,
+      maxwidth = 0.8
+    ),
+    plot.caption = element_textbox_simple(
+      colour = text_col,
+      hjust = 0.5,
+      halign = 0.5,
+      margin = margin(b = 0, t = 20),
+      family = body_font
+    ),
+    aspect.ratio = 1,
+    strip.text = element_blank(),
+    strip.background = element_blank()
+  )
+
+
+# Make interactive --------------------------------------------------------
+
+girafe(
+  ggobj = g,
+  bg = bg_col,
+  options = list(
+    opts_tooltip(
+      opacity = 0.95, use_fill = TRUE,
+      use_stroke = FALSE,
+      css = "
+        padding: 5pt;
+        font-family: Ubuntu;
+        font-size: 1rem;
+        color: {text_col};
+        border: solid;
+        border-color: {highlight_col};
+        border-width: 2px"
+    ),
+    opts_hover_inv(css = "fill:{bg_col};fill-opacity:0.5"),
+    opts_toolbar(saveaspng = FALSE),
+    opts_zoom(max = 1)
+  )
+)
+```
