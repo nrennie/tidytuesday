@@ -31,9 +31,15 @@ showtext_opts(dpi = 300)
 
 # Define colours and fonts-------------------------------------------------
 
+highlight_col <- "darkorange"
+
+# light mode
 bg_col <- "#fafafa"
 text_col <- "black"
-highlight_col <- "darkorange"
+
+# dark mode
+bg_col <- "grey5"
+text_col <- "white"
 
 body_font <- "ubuntu"
 title_font <- "bungee"
@@ -98,7 +104,8 @@ ggplot(
   geom_boxplot(
     width = .15,
     outlier.shape = NA,
-    fill = bg_col
+    fill = bg_col,
+    colour = text_col
   ) +
   stat_dots(
     side = "left",
@@ -127,6 +134,7 @@ ggplot(
     plot.margin = margin(10, 10, 10, 10),
     plot.title.position = "plot",
     plot.caption.position = "plot",
+    text = element_text(colour = text_col),
     plot.background = element_rect(fill = bg_col, colour = bg_col),
     panel.background = element_rect(fill = bg_col, colour = bg_col),
     plot.title = element_textbox_simple(
@@ -159,6 +167,16 @@ ggplot(
       face = "bold",
       colour = text_col,
       size = rel(1.1)
+    ),
+    axis.text.y = element_text(
+      colour = text_col
+    ),
+    panel.grid.major.x = element_blank(),
+    panel.grid.major.y = element_line(
+      colour = alpha(text_col, 0.5)
+    ),
+    panel.grid.minor.y = element_line(
+      colour = alpha(text_col, 0.25)
     )
   )
 
