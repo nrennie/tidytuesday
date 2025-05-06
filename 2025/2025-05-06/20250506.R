@@ -2,7 +2,6 @@
 
 library(tidyverse)
 library(showtext)
-library(patchwork)
 library(camcorder)
 library(ggtext)
 library(nrBrand)
@@ -43,9 +42,9 @@ showtext_opts(dpi = 300)
 
 # Define colours and fonts-------------------------------------------------
 
-bg_col <- "#FAFAFA"
-text_col <- "black"
-highlight_col <- "#FB5012"
+bg_col <- "#d6cac8"
+text_col <- "#3D0D00"
+highlight_col <- "#c72b00"
 null_col <- "grey30"
 
 body_font <- "Montserrat"
@@ -137,7 +136,7 @@ ggplot(
   annotate("text",
     x = "500", y = ymd("20261001"),
     family = body_font,
-    label = str_wrap("Research days lost", 12),
+    label = str_wrap("Research days terminated", 12),
     lineheight = 1
   ) +
   curved_arrow("460", "400",
