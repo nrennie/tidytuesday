@@ -90,7 +90,7 @@ for (i in seq_len(nrow(all_weeks))) {
   
   # get all packages used
   tt_file <- list.files(file.path(tt_week$year, tt_week$week),
-    pattern = ".R|.py", full.names = TRUE
+    pattern = ".R|.py|.svelte", full.names = TRUE
   )[1]
   all_weeks[i, "code_fpath"] <- tt_file
   if (stringr::str_detect(tt_file, ".R")) {
@@ -102,6 +102,8 @@ for (i in seq_len(nrow(all_weeks))) {
     tt_pkgs <- att_from_pyscript(tt_file)
     all_weeks[i, "pkgs"] <- tt_pkgs
     all_weeks[i, "code_type"] <- "Python"
+  } else if (stringr::str_detect(tt_file, ".svelte")) {
+    all_weeks[i, "code_type"] <- "SveltePlot"
   }
   
 }
