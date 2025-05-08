@@ -103,7 +103,11 @@ for (i in seq_len(nrow(all_weeks))) {
     all_weeks[i, "pkgs"] <- tt_pkgs
     all_weeks[i, "code_type"] <- "Python"
   } else if (stringr::str_detect(tt_file, ".svelte")) {
-    all_weeks[i, "code_type"] <- "SveltePlot"
+    all_weeks[i, "pkgs"] <- "SveltePlot"
+    all_weeks[i, "code_type"] <- "JavaScript"
+  } else if (stringr::str_detect(tt_file, ".js")) {
+    all_weeks[i, "pkgs"] <- "D3"
+    all_weeks[i, "code_type"] <- "JavaScript"
   }
   
 }
