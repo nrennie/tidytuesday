@@ -90,7 +90,7 @@ for (i in seq_len(nrow(all_weeks))) {
   
   # get all packages used
   tt_file <- list.files(file.path(tt_week$year, tt_week$week),
-    pattern = ".R|.py|.svelte", full.names = TRUE
+    pattern = ".R|.py|.svelte|.js", full.names = TRUE
   )[1]
   all_weeks[i, "code_fpath"] <- tt_file
   if (stringr::str_detect(tt_file, ".js")) {
