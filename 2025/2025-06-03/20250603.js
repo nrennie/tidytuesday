@@ -8,7 +8,7 @@ function chart(data) {
   const marginBottom = 40;
   const iconSize = 68;
 
-  // Select the chart container and clear any existing content
+  // Select the chart container
   const chartContainer = d3.select("#chart");
 
   const x = d3
@@ -21,7 +21,7 @@ function chart(data) {
     .domain([0.5, 10.5])
     .range([height - marginBottom, marginTop]);
 
-  // Create the SVG container for the new pie chart
+  // Create the SVG container
   const svg = chartContainer
     .append("svg")
     .attr("viewBox", `0 0 ${width} ${height}`)
