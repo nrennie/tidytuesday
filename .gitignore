@@ -9,7 +9,8 @@
 *.geojson
 *.html
 !*/*/index.html
-*.csv
+*data.csv
+*.svg
 
 cover_image.svg
 2020/2020-10-27/wind_turbines.csv
