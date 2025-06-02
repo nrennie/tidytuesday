@@ -93,7 +93,10 @@ for (i in seq_len(nrow(all_weeks))) {
     pattern = ".R|.py|.svelte", full.names = TRUE
   )[1]
   all_weeks[i, "code_fpath"] <- tt_file
-  if (stringr::str_detect(tt_file, ".R")) {
+  if (stringr::str_detect(tt_file, ".js")) {
+    all_weeks[i, "pkgs"] <- "D3"
+    all_weeks[i, "code_type"] <- "JavaScript"
+  } else if (stringr::str_detect(tt_file, ".R")) {
     tt_pkgs <- att_from_rscript(tt_file) |>
       stringr::str_flatten_comma()
     all_weeks[i, "pkgs"] <- tt_pkgs
@@ -104,9 +107,6 @@ for (i in seq_len(nrow(all_weeks))) {
     all_weeks[i, "code_type"] <- "Python"
   } else if (stringr::str_detect(tt_file, ".svelte")) {
     all_weeks[i, "pkgs"] <- "SveltePlot"
-    all_weeks[i, "code_type"] <- "JavaScript"
-  } else if (stringr::str_detect(tt_file, ".js")) {
-    all_weeks[i, "pkgs"] <- "D3"
     all_weeks[i, "code_type"] <- "JavaScript"
   }
   
