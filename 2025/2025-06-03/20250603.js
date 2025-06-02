@@ -1,12 +1,12 @@
 function chart(data) {
   // Set the dimensions of the chart
-  const width = 600;
-  const height = 400;
-  const marginTop = 60;
+  const width = 900;
+  const height = 1200;
+  const marginTop = 140;
   const marginRight = 20;
   const marginLeft = 20;
-  const marginBottom = 30;
-  const iconSize = 24;
+  const marginBottom = 40;
+  const iconSize = 68;
 
   // Select the chart container and clear any existing content
   const chartContainer = d3.select("#chart");
@@ -14,7 +14,7 @@ function chart(data) {
   const x = d3
     .scaleLinear()
     .domain([0.5, 10.5])
-    .range([marginLeft, width - marginRight]);
+    .range([width - marginRight, marginLeft, ]);
 
   const y = d3
     .scaleLinear()
@@ -32,53 +32,75 @@ function chart(data) {
 
   // Plot goes here
   d3.xml("book-solid.svg").then((iconXml) => {
-  const baseIconNode = iconXml.documentElement;
-  
-  data.forEach((d) => {
-    const svgNode = baseIconNode.cloneNode(true);
+    const baseIconNode = iconXml.documentElement;
 
-    d3.select(svgNode)
-      .attr("x", x(d.x) - iconSize / 2)
-      .attr("y", y(d.y) - iconSize / 2)
-      .attr("width", iconSize)
-      .attr("height", iconSize)
-      .style("fill", d.colour)
-      .style("opacity", 1);
+    data.forEach((d) => {
+      const svgNode = baseIconNode.cloneNode(true);
 
-    svg.node().appendChild(svgNode);
+      d3.select(svgNode)
+        .attr("x", x(d.x) - iconSize / 2)
+        .attr("y", y(d.y) - iconSize / 2)
+        .attr("width", iconSize)
+        .attr("height", iconSize)
+        .style("fill", d.colour)
+        .style("opacity", 1);
+
+      svg.node().appendChild(svgNode);
+    });
   });
-});
 
   // Title
-  svg.append("text")
-      .attr("text-anchor", "left")
-      .attr("y", 20)
-      .attr("x", marginLeft)
-      .text("Title.")
-      .style("font-size", "16px")
-      .style("font-weight", "bold");
+  svg
+    .append("foreignObject")
+    .attr("x", marginLeft)
+    .attr("y", 10)
+    .attr("width", 850)
+    .attr("height", 100)
+    .append("xhtml:div")
+    .style("font-size", "32px")
+    .style("font-weight", "bold")
+    .style("line-height", "1.4")
+    .style("text-align", "left")
+    .html(
+      "Majority of Project Gutenberg works are in <span style='color: #A30000;'>English</span>"
+    );
 
   // Subtitle
-  svg.append("text")
-      .attr("text-anchor", "left")
-      .attr("y", 40)
-      .attr("x", marginLeft)
-      .text("Subtitle")
-      .style("font-size", "12px");
+  svg
+    .append("foreignObject")
+    .attr("x", marginLeft)
+    .attr("y", 60)
+    .attr("width", 850)
+    .attr("height", 100)
+    .append("xhtml:div")
+    .style("font-size", "26px")
+    .style("line-height", "1.4")
+    .style("text-align", "left")
+    .html(
+      "Project Gutenberg is a digital library offering free access to over 70,000 public domain books, including classic literature and historical texts."
+    );
 
   // Caption
-  svg.append("text")
-      .attr("text-anchor", "left")
-      .attr("y", height - 10)
+  svg
+      .append("foreignObject")
       .attr("x", marginLeft)
-      .text("Data: ")
-      .style("font-size", "10px");
+      .attr("y", height - 40)
+      .attr("width", 900)
+      .attr("height", 100)
+      .append("xhtml:div")
+      .style("font-size", "26px")
+      .style("line-height", "1.4")
+      .style("text-align", "left")
+      .html(
+        "<b>Data:</b> Project Gutenberg | <b>Graphic</b>: Nicola Rennie (<i class='fa-brands fa-github'></i> GitHub)"
+      );
+  
 }
 
 d3.csv("data.csv", (d) => ({
-    x: +d.x,
-    y: +d.y,
-    colour: d.colour,
+  x: +d.x,
+  y: +d.y,
+  colour: d.colour,
 })).then((data) => {
   chart(data);
 });
