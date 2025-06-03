@@ -92,7 +92,7 @@ function chart(data) {
       .style("line-height", "1.4")
       .style("text-align", "left")
       .html(
-        "<b>Data:</b> Project Gutenberg | <b>Graphic</b>: Nicola Rennie (<i class='fa-brands fa-github'></i> GitHub)"
+        "<b>Data:</b> Project Gutenberg | <b>Graphic</b>: Nicola Rennie (<i class='fa-brands fa-github'></i> nrennie)"
       );
   
 }
