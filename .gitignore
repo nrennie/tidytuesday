@@ -11,6 +11,7 @@
 !*/*/index.html
 *data.csv
 *.svg
+*.xlsx
 
 cover_image.svg
 2020/2020-10-27/wind_turbines.csv
