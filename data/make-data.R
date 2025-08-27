@@ -128,5 +128,5 @@ all_weeks <- all_weeks |>
   distinct()
 
 # save file
-writexl::write_xlsx(all_weeks, "data/all_weeks.xlsx")
+readr::write_csv(all_weeks, "data/all_weeks.csv")
 save(all_weeks, file = "data/all_weeks.RData")
