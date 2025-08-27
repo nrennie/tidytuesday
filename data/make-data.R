@@ -85,7 +85,9 @@ for (i in seq_len(nrow(all_weeks))) {
   )
 
   tt_imgs <- tt_imgs |>
-    subset(stringr::str_detect(tt_imgs, stringr::str_remove_all(tt_week$week, "-|_")))
+    subset(stringr::str_detect(tt_imgs, stringr::str_remove_all(tt_week$week, "-")))
+  tt_imgs <- tt_imgs |>
+    subset(stringr::str_detect(tt_imgs, "_", negate = TRUE))
   all_weeks[i, "img_fpath"] <- tt_imgs[1]
   
   # get all packages used
