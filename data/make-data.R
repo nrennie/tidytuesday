@@ -2,7 +2,7 @@ library(attachment)
 library(dplyr)
 library(tidyr)
 library(stringr)
-library(writexl)
+library(readr)
 
 # utils function
 str_extract_between <- function(x, start, end) {
@@ -128,5 +128,5 @@ all_weeks <- all_weeks |>
   distinct()
 
 # save file
-readr::write_csv(all_weeks, "data/all_weeks.csv")
+write_csv(all_weeks, "data/all_weeks.csv")
 save(all_weeks, file = "data/all_weeks.RData")
