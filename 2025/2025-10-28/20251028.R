@@ -45,7 +45,7 @@ prize_lookup <- prizes |>
   unique() |>
   arrange(prize_id) |>
   mutate(prize_name = case_when(
-    prize_id == 3 ~ "Costa First Novel Award (Whitbread First Novel Award)",
+    prize_id == 3 ~ "Costa First Novel Award (formerly Whitbread First Novel Award)",
     prize_id == 4 ~ "Costa Novel Award (formerly Whitbread Novel Award)",
     prize_id == 8 ~ "Booker Prize (formerly Man Booker Prize)",
     TRUE ~ prize_name
