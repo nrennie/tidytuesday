@@ -114,7 +114,7 @@ social <- nrBrand::social_caption(
   mastodon = NA
 )
 title <- "Citizens and scientists challenge findings"
-st <- "Samples were collected in Flint, Michigan in 2015 by the Michigan Department of Environment (MDEQ) to explore lead levels in water. Community-sourced samples were also later collected through a citizen science project coordinated by Prof Marc Edwards and colleagues at Virginia Tech, after concerns were raised about the MDEQ excluding samples from their data.<br><br>If the 90th percentile value of the sample is above 15 ppb, action is required. The removal of two values from the MDEQ data resulted in the 90th percentile dropping below the 15 ppb threshold."
+st <- "Samples were collected in Flint, Michigan in 2015 by the Michigan Department of Environment (MDEQ) to explore lead levels in water. Community-sourced samples were also later collected through a citizen science project coordinated by Prof Marc Edwards and colleagues at Virginia Tech, after concerns were raised about the MDEQ excluding samples from their data.<br><br>If the 90th percentile value of the sample is **above 15 ppb** (shown by the dashed line) action is required. The removal of two values from the MDEQ data resulted in the 90th percentile dropping below the 15 ppb threshold."
 cap <- paste0(
   "**Data**: Loux and Gibson (2018)<br>**Graphic**: ", social
 )
@@ -143,46 +143,51 @@ p <- ggplot(
     colour = "transparent",
     alpha = 0.3
   ) +
-  geom_segment(
-    data = summary_data,
-    mapping = aes(
-      x = mean, y = 0, yend = 1
-    ),
-    colour = text_col,
-    linewidth = 1.5
-  ) +
-  geom_text(
-    data = summary_data,
-    mapping = aes(
-      x = mean, y = 1.2,
-      label = paste0("Mean\n", round(mean, 1), " ppb")
-    ),
-    hjust = 0,
-    size = 3.5,
-    lineheight = 0.9,
-    colour = text_col,
-    family = body_font
-  ) +
-  geom_segment(
-    data = summary_data,
-    mapping = aes(
-      x = median, y = 0, yend = 1
-    ),
-    colour = text_col,
-    linewidth = 1.5
-  ) +
-  geom_text(
-    data = summary_data,
-    mapping = aes(
-      x = median, y = 1.2,
-      label = paste0("Median\n", round(median, 1), " ppb")
-    ),
-    hjust = 1,
-    size = 3.5,
-    lineheight = 0.9,
-    colour = text_col,
-    family = body_font
-  ) +
+  # geom_segment(
+  #   data = summary_data,
+  #   mapping = aes(
+  #     x = mean, y = 0, yend = 1
+  #   ),
+  #   colour = text_col,
+  #   linewidth = 1.5
+  # ) +
+  # geom_text(
+  #   data = summary_data,
+  #   mapping = aes(
+  #     x = mean, y = 1.2,
+  #     label = paste0("Mean\n", round(mean, 1), " ppb")
+  #   ),
+  #   hjust = 0,
+  #   size = 3.5,
+  #   lineheight = 0.9,
+  #   colour = text_col,
+  #   family = body_font
+  # ) +
+  # geom_segment(
+  #   data = summary_data,
+  #   mapping = aes(
+  #     x = median, y = 0, yend = 1
+  #   ),
+  #   colour = text_col,
+  #   linewidth = 1.5
+  # ) +
+  # geom_text(
+  #   data = summary_data,
+  #   mapping = aes(
+  #     x = median, y = 1.2,
+  #     label = paste0("Median\n", round(median, 1), " ppb")
+  #   ),
+  #   hjust = 1,
+  #   size = 3.5,
+  #   lineheight = 0.9,
+  #   colour = text_col,
+  #   family = body_font
+  # ) +
+  annotate("segment",
+           x = 15, y = 0, yend = 1,
+           colour = text_col,
+           linewidth = 1.5,
+           linetype = "dashed") +
   geom_segment(
     data = summary_data,
     mapping = aes(
@@ -194,7 +199,7 @@ p <- ggplot(
   geom_text(
     data = summary_data,
     mapping = aes(
-      x = perc_90 + 7, y = 1.2,
+      x = perc_90, y = 1.2,
       label = paste0("90th percentile\n", round(perc_90, 1), " ppb")
     ),
     hjust = 0,
@@ -247,7 +252,7 @@ p <- ggplot(
       colour = text_col,
       hjust = 0,
       halign = 0,
-      margin = margin(b = 5, t = 5),
+      margin = margin(b = 0, t = 5),
       family = body_font
     ),
     plot.caption = element_textbox_simple(
@@ -298,33 +303,6 @@ ggdraw(p) +
     curveGrob(
       x1 = 0.35, y1 = 0.56,
       x2 = 0.19, y2 = 0.53,
-      curvature = -0.5,
-      gp = gpar(col = text_col, lwd = 2, fill = text_col),
-      arrow = arrow(type = "closed", length = unit(0.07, "inches"))
-    )
-  ) +
-  draw_grob(
-    curveGrob(
-      x1 = 0.21, y1 = 0.68,
-      x2 = 0.18, y2 = 0.65,
-      curvature = -0.5,
-      gp = gpar(col = text_col, lwd = 2, fill = text_col),
-      arrow = arrow(type = "closed", length = unit(0.07, "inches"))
-    )
-  ) +
-  draw_grob(
-    curveGrob(
-      x1 = 0.17, y1 = 0.45,
-      x2 = 0.14, y2 = 0.42,
-      curvature = -0.5,
-      gp = gpar(col = text_col, lwd = 2, fill = text_col),
-      arrow = arrow(type = "closed", length = unit(0.07, "inches"))
-    )
-  ) +
-  draw_grob(
-    curveGrob(
-      x1 = 0.27, y1 = 0.22,
-      x2 = 0.24, y2 = 0.19,
       curvature = -0.5,
       gp = gpar(col = text_col, lwd = 2, fill = text_col),
       arrow = arrow(type = "closed", length = unit(0.07, "inches"))
