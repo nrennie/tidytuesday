@@ -9,13 +9,20 @@ library(glue)
 library(ggh4x)
 
 
-# Load utils functions ----------------------------------------------------
+# Load fonts --------------------------------------------------------------
 
-source("utils.R")
+font_add_google("Oswald")
+font_add_google("Nunito")
+showtext_auto()
+showtext_opts(dpi = 300)
+title_font <- "Oswald"
+body_font <- "Nunito"
 
 
 # Parameters --------------------------------------------------------------
 
+bg_col <- "#F2F4F8"
+text_col <- "#151C28"
 highlight_col <- "#1A7A89"
 
 
@@ -29,7 +36,6 @@ who_tb_data <- tuesdata$who_tb_data
 
 who_tb_data |>
   select(year, e_inc_num)
-
 
 world_data <- who_tb_data |>
   select(year, e_pop_num, e_inc_num, e_mort_num) |>
@@ -100,6 +106,19 @@ gg_record(
 
 
 # Define text -------------------------------------------------------------
+
+social <- nrBrand::social_caption(
+  bg_colour = bg_col,
+  icon_colour = text_col,
+  font_colour = text_col,
+  font_family = body_font,
+  mastodon = NA
+)
+source_caption <- function(source, sep = "<br>", graphic = social) {
+  glue::glue(
+    "**Data**: {source} {sep} **Graphic**: {graphic}"
+  )
+}
 
 st_inc <- round(sum(filter(who_tb_data, year == 2023)$e_inc_num) / 1000000, 1)
 st_mort <- round(sum(filter(who_tb_data, year == 2023)$e_mort_num, na.rm = TRUE) / 1000000, 1)
@@ -173,7 +192,7 @@ ggplot(
     caption = cap
   ) +
   coord_cartesian(expand = FALSE, clip = "off") +
-  theme_tt() +
+  theme_minimal(base_size = 10, base_family = body_font) +
   theme(
     plot.subtitle = element_textbox_simple(
       colour = text_col,
@@ -190,7 +209,27 @@ ggplot(
     ),
     panel.background = element_blank(),
     panel.spacing.x = unit(1.3, "lines"),
-    plot.margin = margin(5, 50, 5, 5)
+    plot.margin = margin(5, 50, 5, 5),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    panel.background = element_rect(fill = bg_col, colour = bg_col),
+    plot.title = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 5, t = 5),
+      family = title_font,
+      face = "bold",
+      size = rel(1.5)
+    ),
+    plot.caption = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 0, t = 10),
+      family = body_font
+    ),
+    panel.grid.minor = element_blank()
   )
 
 

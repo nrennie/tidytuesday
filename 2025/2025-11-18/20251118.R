@@ -18,10 +18,10 @@ holmes <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tid
 
 # Load fonts --------------------------------------------------------------
 
-sysfonts::font_add_google("Oswald")
-sysfonts::font_add_google("Nunito")
-showtext::showtext_auto()
-showtext::showtext_opts(dpi = 300)
+font_add_google("Oswald")
+font_add_google("Nunito")
+showtext_auto()
+showtext_opts(dpi = 300)
 title_font <- "Oswald"
 body_font <- "Nunito"
 
