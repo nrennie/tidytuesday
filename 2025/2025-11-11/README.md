@@ -1,4 +1,4 @@
-<h1 align="center"> Pima Indian Diabetes Data </h1>
+<h1 align="center"> WHO TB Burden Data </h1>
 
 <p align="center">
   <img src="/2025/2025-11-11/20251111.png" width="60%">

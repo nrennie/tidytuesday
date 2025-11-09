@@ -20,7 +20,7 @@ highlight_col <- "#7F055F"
 
 # Load data ---------------------------------------------------------------
 
-tuesdata <- tidytuesdayR::tt_load("2025-12-02")
+tuesdata <- tidytuesdayR::tt_load("2025-11-25")
 spi_indicators <- tuesdata$spi_indicators
 
 
@@ -48,7 +48,7 @@ summary_data <- plot_data |>
 # Start recording ---------------------------------------------------------
 
 gg_record(
-  dir = file.path("2025", "2025-12-02", "recording"),
+  dir = file.path("2025", "2025-11-25", "recording"),
   device = "png",
   width = 7,
   height = 5,
@@ -123,7 +123,7 @@ ggplot(
 # Save gif ----------------------------------------------------------------
 
 ggsave(
-  filename = file.path("2025", "2025-12-02", paste0("20251202", ".png")),
+  filename = file.path("2025", "2025-11-25", paste0("20251125", ".png")),
   width = 7,
   height = 5,
   bg = bg_col,
@@ -132,7 +132,7 @@ ggsave(
 )
 
 gg_playback(
-  name = file.path("2025", "2025-12-02", paste0("20251202", ".gif")),
+  name = file.path("2025", "2025-11-25", paste0("20251125", ".gif")),
   first_image_duration = 4,
   last_image_duration = 20,
   frame_duration = .25,
