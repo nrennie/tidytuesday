@@ -8,13 +8,20 @@ library(nrBrand)
 library(glue)
 
 
-# Load utils functions ----------------------------------------------------
+# Load fonts --------------------------------------------------------------
 
-source("utils.R")
+font_add_google("Oswald")
+font_add_google("Nunito")
+showtext_auto()
+showtext_opts(dpi = 300)
+title_font <- "Oswald"
+body_font <- "Nunito"
 
 
 # Parameters --------------------------------------------------------------
 
+bg_col <- "#F2F4F8"
+text_col <- "#151C28"
 highlight_col <- "#7F055F"
 
 
@@ -58,6 +65,19 @@ gg_record(
 
 
 # Define text -------------------------------------------------------------
+
+social <- nrBrand::social_caption(
+  bg_colour = bg_col,
+  icon_colour = text_col,
+  font_colour = text_col,
+  font_family = body_font,
+  mastodon = NA
+)
+source_caption <- function(source, sep = "<br>", graphic = social) {
+  glue::glue(
+    "**Data**: {source} {sep} **Graphic**: {graphic}"
+  )
+}
 
 title <- "Statistical performance is improving, but remains related to income"
 st <- glue("The World Bank's Statistical Performance Indicators were developed to help countries assess and improve the performance of their statistical systems. Multiple indicators across data use, data services, data products, data sources, and data infrastructure are combined to give an overall score, with 100 being the highest score.<br><br>The <span style='color:{highlight_col};'>**median score**</span> across all countries within an income bracket has been consistently increasing. However, lower income countries still show poorer statistical performance on average.<br>")
@@ -107,7 +127,7 @@ ggplot(
     y = "Score"
   ) +
   coord_cartesian(expand = FALSE, clip = "off") +
-  theme_tt() +
+  theme_minimal(base_size = 10, base_family = body_font) +
   theme(
     axis.title.y = element_text(
       angle = 0,
@@ -116,7 +136,40 @@ ggplot(
       margin = margin(r = -16)
     ),
     panel.spacing = unit(1.3, "lines"),
-    plot.margin = margin(5, 20, 5, 5)
+    plot.margin = margin(5, 20, 5, 5),
+    plot.title.position = "plot",
+    plot.caption.position = "plot",
+    plot.background = element_rect(fill = bg_col, colour = bg_col),
+    panel.background = element_rect(fill = bg_col, colour = bg_col),
+    plot.title = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 5, t = 5),
+      family = title_font,
+      face = "bold",
+      size = rel(1.5)
+    ),
+    plot.subtitle = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 10, t = 5),
+      family = body_font
+    ),
+    plot.caption = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 0, t = 10),
+      family = body_font
+    ),
+    strip.text = element_textbox_simple(
+      face = "bold",
+      margin = margin(t = 10),
+      size = rel(0.9)
+    ),
+    panel.grid.minor = element_blank()
   )
 
 
