@@ -1,4 +1,4 @@
-<h1 align="center">Global Seafood</h1>
+<h1 align="center"> Global Seafood </h1>
 
 <p align="center">
     <img src="/2021/12-10-2021/12102021.jpg" width="60%">

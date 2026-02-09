@@ -1,4 +1,4 @@
-<h1 align="center"> Du Bois Visualization Challenge 2024 </h1>
+<h1 align="center"> Du Bois Challenge 2024 </h1>
 
 <p align="center">
   <img src="/2024/2024-04-02/20240402.png" width="60%">
