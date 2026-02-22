@@ -70,29 +70,41 @@ ggplot(
 ) +
   geom_line(linewidth = 1) +
   geom_textbox(
-    data = data.frame(x = c(1960, 1999, 2003, 2022, 1945),
-                      y = c(2.3, 3.1, 1.8, 2.3, 3.3),
-                      label = c(annot0, annot1, annot2, annot3, range_annot0),
-                      hjust = c(0, 0, 1, 0, 0)),
-    mapping = aes(x = x, y = y, label = label, 
-                  hjust = hjust, halign = hjust),
+    data = data.frame(
+      x = c(1960, 1999, 2003, 2022, 1945),
+      y = c(2.3, 3.1, 1.8, 2.3, 3.3),
+      label = c(annot0, annot1, annot2, annot3, range_annot0),
+      hjust = c(0, 0, 1, 0, 0)
+    ),
+    mapping = aes(
+      x = x, y = y, label = label,
+      hjust = hjust, halign = hjust
+    ),
     family = body_font,
     fill = "transparent",
     box.colour = "transparent"
   ) +
-  annotate("rect", xmin = 1939, xmax = 1945, ymin = -Inf, ymax = Inf,
-           fill = text_col, alpha = 0.2) +
+  annotate("rect",
+    xmin = 1939, xmax = 1945, ymin = -Inf, ymax = Inf,
+    fill = text_col, alpha = 0.2
+  ) +
   geom_segment(
-    data = data.frame(x = c(1960, 1999, 2003, 2022),
-                      y = c(2.0, 3.38, 1.65, 2.73),
-                      yend = c(2.65, 2.7, 2.56, 1.91)),
+    data = data.frame(
+      x = c(1960, 1999, 2003, 2022),
+      y = c(2.0, 3.38, 1.65, 2.73),
+      yend = c(2.65, 2.7, 2.56, 1.91)
+    ),
     mapping = aes(x = x, y = y, yend = yend)
   ) +
-  scale_x_continuous(limits = c(1935, 2035),
-                     breaks = seq(1935, 2025, by = 30)) +
-  labs(x = NULL, y = NULL,
-       title = title, subtitle = st, caption = cap,
-       tag = "<img src='2026/2026-02-17/sheep.png' width='40'>") +
+  scale_x_continuous(
+    limits = c(1935, 2035),
+    breaks = seq(1935, 2025, by = 30)
+  ) +
+  labs(
+    x = NULL, y = NULL,
+    title = title, subtitle = st, caption = cap,
+    tag = "<img src='2026/2026-02-17/sheep.png' width='40'>"
+  ) +
   coord_cartesian(clip = "off") +
   theme_minimal(base_size = 10, base_family = body_font) +
   theme(
@@ -143,10 +155,54 @@ ggplot(
     dpi = 300
   ) -> p
 
-
 # Save --------------------------------------------------------------------
 
 save_ggplot(
   plot = p,
   file = file.path("2026", "2026-02-17", paste0("20260217", ".png"))
+)
+
+
+
+
+# Amendment ---------------------------------------------------------------
+
+p +
+  geom_textbox(
+    data = data.frame(
+      x = 1979,
+      y = 3.75,
+      label = "**1979**<br>Birth of Hadley Wickham. Sheep decline begins. Correlation ≠ causation.",
+      hjust = 1
+    ),
+    mapping = aes(
+      x = x, y = y, label = label,
+      hjust = hjust, halign = hjust
+    ),
+    family = body_font,
+    fill = "transparent",
+    box.colour = "transparent",
+    minwidth = unit(4, "cm")
+  ) +
+  geom_segment(
+    data = data.frame(
+      x = 1979,
+      y = 3.05,
+      yend = 3.7
+    ),
+    mapping = aes(x = x, y = y, yend = yend)
+  ) +
+  theme(
+    plot.subtitle = element_textbox_simple(
+      colour = text_col,
+      hjust = 0,
+      halign = 0,
+      margin = margin(b = 25, t = 0),
+      family = body_font
+    )
+  ) -> new_p
+
+save_ggplot(
+  plot = new_p,
+  file = file.path("2026", "2026-02-17", paste0("20260217_v2", ".png"))
 )
