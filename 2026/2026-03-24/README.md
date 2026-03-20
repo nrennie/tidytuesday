@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="/2026/2026-03-24/20260324-50.png" width="60%">
+  <img src="/2026/2026-03-24/20260324-50.gif" width="60%">
 </p>
 
 <p align="center">
