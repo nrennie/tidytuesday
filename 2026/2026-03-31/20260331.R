@@ -40,7 +40,6 @@ temp_data <- ocean_temperature |>
     year = year(date),
     month = month(date)
   ) |>
-  # filter(year == 2025) |>
   select(month, sensor_depth_at_low_tide_m, mean_temperature_degree_c) |>
   group_by(month, sensor_depth_at_low_tide_m) |>
   summarise(med = median(mean_temperature_degree_c)) |>
@@ -91,12 +90,13 @@ ggplot(data = plot_data) +
     ),
     size = 1.1
   ) +
+  # add heatmap
   geom_rect(mapping = aes(
     xmin = month - 0.5, xmax = month + 0.5,
     ymin = start,
     ymax = sensor_depth_at_low_tide_m, fill = med
   ),
-  alpha = 0.5) +
+  alpha = 0.55) +
   geom_hline(
     yintercept = depths,
     colour = bg_col,
@@ -108,6 +108,7 @@ ggplot(data = plot_data) +
     linewidth = 0.75
   ) +
   scale_fill_met_c("Hiroshige", direction = -1) +
+  guides(fill = guide_colourbar(alpha = 0.7)) +
   scale_x_continuous(
     breaks = 1:12,
     labels = month.abb
@@ -119,12 +120,13 @@ ggplot(data = plot_data) +
     subtitle = st,
     caption = cap,
     x = NULL,
-    y = "Sensor depth at low tide (m)"
+    y = "Sensor depth at low tide (m)",
+    fill = "(°C)"
   ) +
   coord_cartesian(expand = FALSE) +
   theme_minimal(base_size = 11, base_family = body_font) +
   theme(
-    legend.position = "none",
+    legend.position = "bottom",
     aspect.ratio = 1,
     plot.margin = margin(5, 15, 5, 10),
     plot.title.position = "plot",
@@ -151,19 +153,25 @@ ggplot(data = plot_data) +
       colour = text_col,
       hjust = 0,
       halign = 0,
-      margin = margin(b = 5, t = 15),
+      margin = margin(b = 5, t = 10),
       family = body_font
     ),
     axis.title.y = element_text(angle = 0, vjust = 1.05,
                                 margin = margin(r = -145)),
     panel.grid.minor = element_blank(),
-    panel.grid.major = element_blank()
+    panel.grid.major = element_blank(),
+    legend.ticks = element_blank(),
+    legend.key.width = unit(0.89, "in"),
+    legend.key.height = unit(0.1, "in"),
+    legend.title.position = "left",
+    legend.title = element_text(vjust = 0.3, size = rel(0.8),
+                                margin = margin(l = -15))
   ) +
   canvas(
-    width = 5, height = 7,
+    width = 5, height = 7.5,
     units = "in", bg = bg_col,
     dpi = 300
-  ) -> p
+  ) # -> p
 
 
 # Save --------------------------------------------------------------------
