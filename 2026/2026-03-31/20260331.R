@@ -171,7 +171,7 @@ ggplot(data = plot_data) +
     width = 5, height = 7.5,
     units = "in", bg = bg_col,
     dpi = 300
-  ) # -> p
+  ) -> p
 
 
 # Save --------------------------------------------------------------------
