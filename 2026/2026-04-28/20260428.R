@@ -131,7 +131,7 @@ social <- nrBrand::social_caption(
   font_family = body_font
 )
 title <- "Peach jam comes at a premium"
-st <- "Most-Favored-Nation (MFN) tariff rates for imports into the United States from 1997-2025, for productts using *ad valorem* tariff, i.e., an import duty calculated as a fixed percentage of the total value of imported goods."
+st <- "Most-Favored-Nation (MFN) tariff rates for imports into the United States from 1997-2025, for products using an *ad valorem* tariff, i.e., an import duty calculated as a fixed percentage of the total value of imported goods."
 cap <- paste0(
   "**Note**: Citrus jams, fruit jellies, and marmalades do not include orange marmalades.<br>",
   source_caption(
@@ -253,7 +253,7 @@ ggplot() +
     width = 8, height = 5.5,
     units = "in", bg = bg_col,
     dpi = 300
-  ) # -> p
+  ) -> p
 
 
 # Save --------------------------------------------------------------------
