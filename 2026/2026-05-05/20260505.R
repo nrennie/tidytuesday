@@ -57,12 +57,15 @@ text_data <- plot_data |>
   arrange(Year, desc(value))
 
 text_data2 <- data.frame(
-  x = c(1945, 1967), 
-  y = c(410, 700000),
-  hjust = c(1, 1),
-  name = c("Ships_launched", "Ships_weight"),
+  x = c(1945, 1968.5, 1967.5, 1916), 
+  y = c(280, 720000, 5500, 2500),
+  hjust = c(1, 1, 1, 1),
+  name = c("Ships_launched", "Ships_weight",
+           "Weight_per_ship", "Weight_per_ship"),
   txt = c("Production spikes after World War II",
-          "Ships under 100 tons excluded after 1967")
+          "Ships under 100 tons excluded after 1967",
+          "Ships under 100 tons excluded after 1967",
+          "Spike in capacity begins during World War I")
 )
 
 plot_data$name <- factor(plot_data$name,
@@ -109,7 +112,7 @@ ggplot(
     data = text_data |>
       mutate(
         x = c(1870, 1970, 1970),
-        y = c(820, 1000000, 12000),
+        y = c(820, 1060000, 12000),
         txt = c(
           "Ship production peaked in ",
           "Total capacity peaked in ",
@@ -143,7 +146,7 @@ ggplot(
     fill = "transparent",
     box.colour = "transparent",
     size = 3,
-    maxwidth = unit(5, "lines")
+    maxwidth = unit(3, "lines")
   ) +
   geom_line() +
   facet_wrap(~name, nrow = 1, scales = "free_y") +
@@ -166,7 +169,7 @@ ggplot(
   theme_minimal(base_size = 10, base_family = body_font) +
   theme(
     legend.position = "none",
-    plot.margin = margin(5, 15, 5, 5),
+    plot.margin = margin(10, 15, 10, 10),
     plot.title.position = "plot",
     plot.caption.position = "plot",
     plot.background = element_rect(fill = bg_col, colour = bg_col),
@@ -195,15 +198,16 @@ ggplot(
       family = body_font
     ),
     strip.text = element_textbox_simple(
-      margin = margin(t = 10),
+      margin = margin(t = 10, b = 0),
       size = rel(0.9),
       height = NULL,
-      minheight = unit(3, "lines")
+      minheight = unit(2.8, "lines")
     ),
-    panel.grid.minor = element_blank()
+    panel.grid.minor = element_blank(),
+    panel.spacing.x = unit(1, "lines")
   ) +
   canvas(
-    width = 7, height = 5,
+    width = 9, height = 5,
     units = "in", bg = bg_col,
     dpi = 300
   ) -> p
