@@ -1,0 +1,307 @@
+---
+title: "Twinned Cities"
+execute: 
+  eval: true
+  echo: false
+  warning: false
+  message: false
+---
+
+```{=html}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/css/selectize.default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js"></script>
+```
+
+
+```{r}
+library(tidyverse)
+library(showtext)
+library(ggtext)
+library(glue)
+library(rcartocolor)
+library(ggiraph)
+library(colorTools)
+library(htmltools)
+cities_data <- read_csv("cities_data.csv")
+```
+
+```{r}
+# Load fonts --------------------------------------------------------------
+
+font_add_google("Oswald")
+font_add_google("Nunito")
+showtext_auto()
+showtext_opts(dpi = 300)
+title_font <- "Oswald"
+body_font <- "Nunito"
+
+
+# Define colours and fonts-------------------------------------------------
+
+continents <- unique(cities_data$continent_col)
+col_palette <- rcartocolor::carto_pal(n = length(continents) + 1, "Safe")[1:length(continents)]
+names(col_palette) <- continents
+
+bg_col <- "#FFFFFF"
+text_col <- "#151C28"
+highlight_col <- col_palette[1]
+```
+
+```{r}
+region_data <- function(region, data) {
+  output <- data |>
+    group_by({{ region }}) |>
+    mutate(n = n()) |>
+    ungroup() |>
+    select({{ region }}, n, continent_col, order, chosen_city) |>
+    distinct() |>
+    arrange(order)
+  return(output)
+}
+```
+
+```{r}
+min_links <- 25
+options_vec <- cities_data |>
+  count(chosen_city) |> 
+  filter(n >= min_links) |> 
+  arrange(chosen_city) |>
+  select(-n) |> 
+  pull(chosen_city) 
+names(options_vec) <- options_vec
+default_name <- "Algiers"
+dropdown_html <- tags$div(
+  style = "text-align: center; margin-bottom: 10px;",
+  tags$select(
+    id = "dropdown",
+    lapply(names(options_vec), function(name) {
+      tags$option(
+        value = options_vec[[name]],
+        selected = if (name == default_name) "selected" else NULL,
+        name
+      )
+    })
+  )
+)
+```
+
+```{r}
+draw_layer <- function(pick_city) {
+  output <- list(
+    geom_col_interactive(
+      data = filter(cities_data, chosen_city == pick_city) |>
+        slice_head(n = 1),
+      mapping = aes(
+        x = 1, y = "0", fill = city_col,
+        data_id = chosen_city
+      ),
+      position = "fill",
+      width = 1
+    ),
+    geom_text_interactive(
+      data = filter(cities_data, chosen_city == pick_city) |>
+        slice_head(n = 1),
+      mapping = aes(
+        x = 0, y = "0", label = chosen_city,
+        colour = blackOrWhite(col_palette[city_col]),
+        data_id = chosen_city
+      ),
+      vjust = 2.8,
+      size = 11,
+      size.unit = "pt"
+    ),
+    geom_col_interactive(
+      data = region_data(
+        city,
+        filter(cities_data, chosen_city == pick_city)
+      ) |> 
+        group_by(city, n, continent_col) |>
+        slice_min(order) |>
+        ungroup() |> 
+        arrange(order) |> 
+        mutate(city = factor(city, levels = city)),
+      mapping = aes(
+        x = n, y = "1", fill = continent_col,
+        tooltip = city,
+        data_id = chosen_city
+      ),
+      position = "fill",
+      colour = text_col,
+      width = 1
+    ),
+    geom_col_interactive(
+      data = region_data(
+        country,
+        filter(cities_data, chosen_city == pick_city)
+      ) |> 
+        group_by(country, n, continent_col) |>
+        slice_min(order) |>
+        ungroup() |> 
+        arrange(order) |> 
+        mutate(country = factor(country, levels = country)),
+      mapping = aes(
+        x = n, y = "2", fill = continent_col,
+        tooltip = country,
+        data_id = chosen_city
+      ),
+      position = "fill",
+      colour = text_col,
+      width = 1
+    ),
+    geom_col_interactive(
+      data = region_data(
+        continent,
+        filter(cities_data, chosen_city == pick_city)
+      ) |>
+        group_by(continent, n, continent_col) |>
+        slice_min(order) |>
+        ungroup() |>
+        mutate(continent = factor(continent, levels = continent)),
+      mapping = aes(
+        x = n, y = "3", fill = continent_col,
+        tooltip = continent,
+        data_id = chosen_city
+      ),
+      position = "fill",
+      colour = text_col,
+      width = 1
+    )
+  )
+  return(output)
+}
+```
+
+```{r}
+g_int <- ggplot() +
+  scale_colour_identity() +
+  scale_fill_manual(values = col_palette) +
+  coord_radial(expand = FALSE) +
+  theme_void(base_size = 12, base_family = body_font) +
+  theme(
+    legend.position = "none",
+    plot.margin = margin(5, 5, 5, 5),
+    plot.background = element_rect(fill = bg_col, colour = bg_col),
+    panel.background = element_rect(fill = bg_col, colour = bg_col),
+    panel.grid.minor = element_blank()
+  )
+for (i in 1:length(options_vec)) {
+  g_int <- g_int +
+  draw_layer(options_vec[i])
+}
+```
+
+```{r}
+g_girafe <- girafe(
+  ggobj = g_int,
+  bg = bg_col,
+  options = list(
+    opts_tooltip(
+      delay_mouseover = 500,
+      opacity = 0.9,
+      css = glue("
+        padding: 5pt;
+        font-family: {body_font};
+        font-size: 1rem;
+        background-color: {bg_col};
+        color: {text_col};
+        border: solid;
+        border-color: {text_col};
+        border-radius: 5px;
+        border-width: 2px")
+    ),
+    opts_hover(css = "opacity: 1;"),
+    opts_hover_inv(css = "opacity: 0;"),
+    opts_toolbar(hidden = c("saveaspng", "fullscreen")),
+    opts_zoom(max = 1)
+  )
+)
+```
+
+Twinned towns (also known as sister cities) are a form of legal or social agreement between two geographically and politically distinct localities for the purpose of promoting cultural and commercial ties. This dataset looks at links specifically between cities, i.e. it does not include towns, villages or other geographic entities.
+
+```{r}
+#| output: asis
+output <- purrr::map_chr(
+  .x = 1:length(col_palette),
+  .f = ~ glue("<span style='color:{col_palette[.x]}'>**{names(col_palette)[.x]}**</span>")
+) |>
+  stringr::str_flatten(collapse = ", ", last = ", and ")
+cat(paste0("Select a city from the dropdown menu to see how it's connected across ", output, "."))
+```
+
+
+```{r}
+browsable(
+  tagList(
+    dropdown_html,
+    g_girafe
+  )
+)
+```
+
+```{css}
+.selectize-input {
+  border-radius: 4px !important;
+  border: 2px solid #AAAAAA !important;
+  padding: 4px 8px !important;
+  background: white !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+.selectize-dropdown {
+  border: 2px solid #AAAAAA !important;
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  text-align: left !important;
+}
+
+.selectize-dropdown-content {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.selectize-dropdown-content .option {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.selectize-dropdown-content .option:hover,
+.selectize-dropdown-content .option.active {
+  background: #f0f0f0 !important;
+  color: inherit !important;
+}
+```
+
+```{js}
+$(document).ready(function() {
+  $('#dropdown').selectize({
+    maxOptions: 5500,
+    onChange: function(value) {
+      applySelection(value);
+    }
+  });
+
+  setTimeout(function() {
+    applySelection(document.getElementById('dropdown').value);
+  }, 500);
+});
+
+function applySelection(value) {
+  document.querySelectorAll('[data-id]').forEach(el => {
+    if (el.getAttribute('data-id') === value) {
+      el.setAttribute('style', 'display:block;');
+    } else {
+      el.setAttribute('style', 'display:none;');
+    }
+  });
+}
+
+```
+
+**Note**: Only cities with at least `r min_links` connections are included in the dropdown.
+
+**Data**: Wikidata (via [github.com/bothness/twin-cities](https://github.com/bothness/twin-cities))
+
+**Graphic**: [Nicola Rennie](https://nrennie.rbind.io/)
