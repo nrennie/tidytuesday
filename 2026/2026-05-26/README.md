@@ -3,3 +3,7 @@
 <p align="center">
   <img src="/2026/2026-05-26/20260526.png" width="60%">
 </p>
+
+<p align="center">
+  <img src="/2026/2026-05-26/20260526_interactive.png" width="60%">
+</p>

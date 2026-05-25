@@ -42,6 +42,8 @@ plot_data <- energy_cleaned |>
     access_non_solid_fuel_rural_pop_pct, access_non_solid_fuel_urban_pop_pct
   ) |>
   drop_na(starts_with("access")) |>
+  filter_out(str_detect(country_name, "income|Europe|Asia|Oceania|World|America")) |>
+  filter_out(str_detect(country_name, "\\(")) |>
   mutate(
     across(
       starts_with("access"), ~ .x / 100
@@ -49,6 +51,12 @@ plot_data <- energy_cleaned |>
   ) |> 
   mutate(
     tooltip = glue("<b>{country_name}</b><br>Rural: {round(100 * access_non_solid_fuel_rural_pop_pct)}%<br>Urban: {round(100 * access_non_solid_fuel_urban_pop_pct)}%")
+  )
+
+med_data <- plot_data |> 
+  summarise(
+    med_rural = median(access_non_solid_fuel_rural_pop_pct),
+    med_urban = median(access_non_solid_fuel_urban_pop_pct)
   )
 
 
@@ -61,13 +69,17 @@ social <- nrBrand::social_caption(
   font_family = body_font
 )
 title <- glue("Better access to non-solid fuels in <span style='color:{urban_col};'>urban</span> than <span style='color:{rural_col};'>rural</span> areas")
-st <- "The **Sustainable Energy for all (SE4ALL)** initiative, launched in 2010 by the UN Secretary General, established three global objectives to be accomplished by 2030: to ensure universal access to modern energy services, to double the global rate of improvement in global energy efficiency, and to double the share of renewable energy in the global energy mix.<br><br>*Percentage of urban/rural population with access to non-solid fuels like natural gas, LPG, electricity, or ethanol in 2010.*"
+st <- "The **Sustainable Energy for all (SE4ALL)** initiative, launched in 2010 by the UN Secretary General, established three global objectives to be accomplished by 2030: to ensure universal access to modern energy services, to double the global rate of improvement in global energy efficiency, and to double the share of renewable energy in the global energy mix.<br><br>*Percentage of urban/rural population with access to non-solid fuels like natural gas, LPG, electricity, or ethanol in 2010 (%). White lines indicate median percentage.*"
+st <- "The **Sustainable Energy for all (SE4ALL)** initiative, launched in 2010 by the UN Secretary General, established three global objectives to be accomplished by 2030: to ensure universal access to modern energy services, to double the global rate of improvement in global energy efficiency, and to double the share of renewable energy in the global energy mix.<br><br>*Percentage of urban/rural population with access to non-solid fuels like natural gas, LPG, electricity, or ethanol in 2010 (%).*"
 cap <- source_caption(source = "SE4ALL Gloabl Database", graphic = social)
 
 
 # Plot --------------------------------------------------------------------
 
 offset <- 0.03
+alpha_val <- 0.6
+alpha_val <- 1
+
 g <- ggplot(data = plot_data) +
   # arcs
   geom_path_interactive(
@@ -79,7 +91,7 @@ g <- ggplot(data = plot_data) +
       tooltip = tooltip
     ),
     stat = ggforce::StatArc,
-    colour = rural_col
+    colour = alpha(rural_col, alpha_val)
   ) +
   geom_path_interactive(
     mapping = aes(
@@ -90,9 +102,9 @@ g <- ggplot(data = plot_data) +
       tooltip = tooltip
     ),
     stat = ggforce::StatArc,
-    colour = urban_col
+    colour = alpha(urban_col, alpha_val)
   ) +
-  # point
+  # points
   geom_point_interactive(
     mapping = aes(
       x = access_non_solid_fuel_rural_pop_pct,
@@ -100,7 +112,7 @@ g <- ggplot(data = plot_data) +
       data_id = country_name,
       tooltip = tooltip
     ),
-    colour = rural_col
+    colour = alpha(rural_col, alpha_val)
   ) +
   geom_point_interactive(
     mapping = aes(
@@ -109,7 +121,7 @@ g <- ggplot(data = plot_data) +
       data_id = country_name,
       tooltip = tooltip
     ),
-    colour = urban_col
+    colour = alpha(urban_col, alpha_val)
   ) +
   # axis
   geom_text(
@@ -119,15 +131,31 @@ g <- ggplot(data = plot_data) +
     family = body_font,
     colour = text_col
   ) +
+  geom_text(
+    data = data.frame(
+      x = c(-0.03, -0.03),
+      y = c(offset, -offset),
+      label = c("Rural", "Urban"),
+      colour = c(rural_col, urban_col)
+    ),
+    mapping = aes(x = x, y = y, label = label, colour = colour),
+    family = body_font,
+    fontface = "bold",
+    hjust = 1,
+    size = 4
+  ) +
+  scale_colour_identity() +
+  scale_x_continuous(limits = c(-0.07, 1.01)) +
+  # text and styling
   labs(
     title = title,
     subtitle = st,
     caption = cap
   ) +
-  coord_fixed() +
+  coord_fixed(clip = "off") +
   theme_void(base_size = 10, base_family = body_font) +
   theme(
-    plot.margin = margin(5, 10, 5, 5),
+    plot.margin = margin(5, 10, 5, 10),
     plot.title.position = "plot",
     plot.caption.position = "plot",
     plot.background = element_rect(fill = bg_col, colour = bg_col),
@@ -164,6 +192,46 @@ g <- ggplot(data = plot_data) +
   ) 
 
 g +
+  geom_path(
+    data = med_data,
+    mapping = aes(
+      x0 = med_rural / 2,
+      y0 = offset, r = med_rural / 2,
+      start = -pi / 2, end = pi / 2
+    ),
+    linewidth = 1.3,
+    stat = ggforce::StatArc,
+    colour = text_col
+  ) +
+  geom_point(
+    data = med_data,
+    mapping = aes(
+      x = med_rural,
+      y = offset
+    ),
+    colour = text_col,
+    size = 2
+  ) +
+  geom_path(
+    data = med_data,
+    mapping = aes(
+      x0 = med_urban / 2,
+      y0 = -offset, r = med_urban / 2,
+      start = pi / 2, end = 3 * pi / 2
+    ),
+    linewidth = 1.3,
+    stat = ggforce::StatArc,
+    colour = text_col
+  ) +
+  geom_point(
+    data = med_data,
+    mapping = aes(
+      x = med_urban,
+      y = -offset
+    ),
+    colour = text_col,
+    size = 2
+  ) +
   canvas(
     width = 6, height = 8,
     units = "in", bg = bg_col,
