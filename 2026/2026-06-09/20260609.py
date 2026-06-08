@@ -5,6 +5,7 @@ import matplotlib.font_manager as fm
 import os
 import highlight_text as ht
 import re
+import numpy as np
 from ninejs import interactive, css, save, show
 
 
