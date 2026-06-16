@@ -255,7 +255,7 @@ ggplot() +
     data = plot_data,
     mapping = aes(x = Year, y = Number, fill = Sex),
     position = "fill",
-    alpha = 0.5
+    alpha = 0.3
   ) +
   geom_line(
     data = plot_data,
