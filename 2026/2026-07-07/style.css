@@ -1,0 +1,266 @@
+body {
+  font-family: "Nunito", sans-serif;
+  font-feature-settings: "salt" 1;
+  font-weight: 400;
+  max-width: 700px;
+  margin: 0px auto;
+  padding-bottom: 10px;
+  background-color: #F2F4F8;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Oswald", sans-serif;
+  font-feature-settings: "salt" 1;
+  font-weight: 600;
+  max-width: 700px;
+  margin: 0px auto;
+  padding-bottom: 0px;
+  margin-bottom: -10px;
+}
+
+a {
+  color: #7F055F;
+  text-decoration: none;
+}
+
+.table-title {
+  padding-top: 10px;
+}
+
+.subtitle, .source {
+  color: #333;
+}
+
+.legend--extraText {
+  padding-top: 10px !important;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: "Nunito", sans-serif;
+}
+
+/* alignment */
+.col--text,
+.col--date {
+  text-align: left;
+}
+
+.col--number {
+  text-align: right;
+}
+
+/* full‑width thick header line */
+thead tr {
+  border-bottom: 3px solid #666;
+}
+
+thead th,
+thead td {
+  padding: 0.5rem 0.75rem;
+  padding-left: 0px;
+  text-align: left;
+}
+
+tbody th,
+tbody td {
+  padding: 0.45rem 0.75rem;
+  padding-left: 0px;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr td,
+tbody tr th {
+	padding-top: 8px;
+	padding-bottom: 8px;
+}
+
+/* a bit more room specifically around the sparkline so the
+   taller SVG doesn't feel cramped against neighbouring cells */
+td.col--sparkline {
+	padding-top: 6px;
+	padding-bottom: 6px;
+}
+
+/* Screenreader-only caption */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+}
+
+/* Column headers */
+table thead th {
+  vertical-align: bottom;
+}
+
+/* Horizontal scroll */
+.table-scroll {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.table-scroll table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+.table-scroll th,
+.table-scroll td {
+  min-width: var(--min-col-width);
+  max-width: var(--max-col-width);
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Freeze first column */
+.table-scroll.freeze-first-col th:first-child,
+.table-scroll.freeze-first-col td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: white;
+}
+
+.table-scroll.freeze-first-col thead th:first-child {
+  z-index: 4;
+}
+
+.table-scroll.freeze-first-col th.colgroup-header {
+  position: relative;
+  /* anchor for inner element */
+}
+
+.table-scroll.freeze-first-col .sticky-first-col {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: white;
+  display: inline-block;
+}
+
+.table-scroll.freeze-first-col th:first-child,
+.table-scroll.freeze-first-col td:first-child,
+.table-scroll.freeze-first-col .sticky-first-col {
+  box-shadow: 1px 0 0 white;
+}
+
+/* group header rows */
+tbody th[scope="colgroup"] {
+  text-align: left;
+  font-weight: bold;
+  padding-top: 2rem;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:first-child th[scope="colgroup"] {
+  padding-top: 0.75rem;
+}
+
+tbody th[scope="row"] {
+  font-weight: normal;
+}
+
+.table-pagination {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	margin-top: 12px;
+	font-size: 0.9em;
+}
+
+.table-pagination .pagination-status {
+	min-width: 90px;
+	text-align: center;
+}
+
+.table-pagination button {
+	padding: 6px 14px;
+	border: 1px solid #7F055F;
+	border-radius: 4px;
+	background-color: #ffffff;
+	color: #7F055F;
+	font-size: 0.9em;
+	cursor: pointer;
+}
+
+.table-pagination button:hover:not(:disabled) {
+	background-color: #7F055F;
+	color: #ffffff;
+}
+
+.table-pagination button:disabled {
+	border-color: #cccccc;
+	color: #999999;
+	cursor: not-allowed;
+	background-color: #f5f5f5;
+}
+
+.table-filters {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin: 12px 0;
+}
+
+.table-filters .filter-row {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: 4px;
+}
+
+.table-filters .filter-label {
+	font-size: 0.9em;
+	font-weight: 600;
+}
+
+.table-filters .filter-select {
+	width: 100%;
+	padding: 6px 10px;
+	border: 1px solid #7F055F;
+	border-radius: 4px;
+	background-color: #ffffff;
+	color: #333333;
+	font-size: 0.9em;
+	cursor: pointer;
+}
+
+.table-filters .filter-select:hover {
+	border-color: #7F055F;
+}
+
+.table-filters .filter-select:focus {
+	outline: 2px solid #7F055F;
+	outline-offset: 1px;
+}
+
+/* Sparkline */
+.col--sparkline {
+	width: 110px;
+}
+
+td.col--sparkline {
+	vertical-align: middle;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.sparkline {
+	display: block;
+}
