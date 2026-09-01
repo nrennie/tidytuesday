@@ -39,7 +39,7 @@ highlight_col <- "#7F055F"
 
 # Data wrangling ----------------------------------------------------------
 
-choose_type <- "General Training" # "Academic" or "General Training"
+choose_type <- "Academic" # "Academic" or "General Training"
 
 world <- ne_countries()
 
@@ -78,7 +78,7 @@ label_data <- map_data |>
     ),
     score_label = if_else(
       !is.na(score) & part == "Overall",
-      glue("**{score_label}**"),
+      glue("<b>{score_label}</b>"),
       score_label
     )
   ) |>
@@ -116,8 +116,8 @@ names(col_palette) <- c(
   "Very good / Expert"
 )
 
-# add legend at the bottom
-# add numbers to scores
+plot_data$colour_label <- factor(plot_data$colour_label,
+                                 levels = names(col_palette))
 
 
 # Define text -------------------------------------------------------------
@@ -140,7 +140,7 @@ if (highest_score == "United States of America") {
 
 title <- glue("Test takers from {highest_score} have the highest average overall IELTS ({choose_type}) score")
 st <- glue("Average score for {choose_type} International English Language Testing System (IELTS) exams by nationality of test taker. 2024-2025.")
-cap <- paste0("**Note 1**: The IELTS consists of 4 parts: Listening, Speaking, Reading and Writing. Each part is scored using a 'band' system from 1 to 9, and then the four parts are averaged for an overall score.<br>**Note 2**: There are two versions of the exam: Academic (for candidates applying for higher education or professional registration), and General Training (for candidates seeking work visas, vocational training, or migration to English-speaking countries). The Reading and Writing parts of the test differ between the Academic and General Training versions.<br>", source_caption(source = "ILETS Research (ielts.org/", graphic = social))
+cap <- paste0("**Note 1**: The IELTS consists of 4 parts: Listening, Speaking, Reading and Writing. Each part is scored using a 'band' system from 1 to 9, and then the four parts are averaged for an overall score.<br>**Note 2**: There are two versions of the exam: Academic (for candidates applying for higher education or professional registration), and General Training (for candidates seeking work visas, vocational training, or migration to English-speaking countries). The reading and writing parts of the test differ between the Academic and General Training versions.<br>", source_caption(source = "ILETS Research (ielts.org)", graphic = social))
 
 
 # Plot --------------------------------------------------------------------
@@ -153,21 +153,26 @@ g_int <- ggplot() +
       data_id = name_en,
       tooltip = label
     ),
-    colour = bg_col
+    colour = bg_col,
+    show.legend = TRUE
   ) +
   scale_fill_manual(
     values = col_palette,
-    na.value = "grey80"
+    na.value = "grey80",
+    drop = FALSE,
+    breaks = names(col_palette)
   ) +
   labs(
     title = title,
     subtitle = st,
-    caption = ""
+    caption = cap
   ) +
   theme_minimal(base_size = 10, base_family = body_font) +
   theme(
-    legend.position = "none",
-    plot.margin = margin(5, 5, 5, 5),
+    legend.position = "bottom",
+    legend.title = element_blank(),
+    legend.text.position = "bottom",
+    plot.margin = margin(5, 10, 5, 10),
     plot.title.position = "plot",
     plot.caption.position = "plot",
     plot.background = element_rect(fill = bg_col, colour = bg_col),
@@ -196,9 +201,25 @@ g_int <- ggplot() +
       family = body_font
     ),
     panel.grid = element_blank(),
+    legend.key.spacing.x = unit(0.5, "lines"),
     axis.title = element_blank(),
     axis.text = element_blank()
   )
+
+
+# Save --------------------------------------------------------------------
+
+g_int +
+  canvas(
+    width = 6, height = 5.5,
+    units = "in", bg = bg_col,
+    dpi = 300
+  ) -> p
+
+save_ggplot(
+  plot = p,
+  file = file.path("2026", "2026-08-18", paste0("20260818", ".png"))
+)
 
 
 # Interactive -------------------------------------------------------------
@@ -207,7 +228,7 @@ girafe(
   ggobj = g_int,
   bg = bg_col,
   width_svg = 6,
-  height_svg = 4,
+  height_svg = 5.5,
   options = list(
     opts_tooltip(
       delay_mouseover = 500,
@@ -230,18 +251,4 @@ girafe(
   )
 )
 
-
-# Save --------------------------------------------------------------------
-
-g_int +
-  canvas(
-    width = 6, height = 4,
-    units = "in", bg = bg_col,
-    dpi = 300
-  ) # -> p
-
-save_ggplot(
-  plot = p,
-  file = file.path("2026", "2026-08-18", paste0("20260818", ".png"))
-)
 
