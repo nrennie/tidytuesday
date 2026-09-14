@@ -1,4 +1,6 @@
-<h1 align="center"> #DuBoisChallenge Tweets </h1>
+<h1 align="center">
+#DuBoisChallenge Tweets
+</h1>
 
 The DuBois Challenge celebrated the data visualization legacy of W.E.B DuBois by recreating the visualizations from the 1900 Paris Exposition using modern tools. These are the tweets from around the globe using #DuBoisChallenge, showing different users and number of likes.
   
