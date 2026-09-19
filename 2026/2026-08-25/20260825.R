@@ -52,10 +52,11 @@ all_words <- country_lyrics |>
 cols_in <- colors()[colors() %in% unique(all_words$word)]
 all_cols <- country_lyrics |>
   select(year = entered_top_30_in, lyrics) |>
+  filter(year > 2013) |> 
   mutate(
     lyrics = str_to_lower(lyrics),
     as_tibble(
-      outer(lyrics, cols_in, \(x, y) str_detect(x, fixed(y))),
+      outer(lyrics, cols_in, \(x, y) str_detect(x, paste0("\\b", y, "\\b"))),
       .name_repair = ~cols_in
     )
   ) |>
@@ -67,15 +68,16 @@ all_cols <- country_lyrics |>
   filter(value) |>
   count(topic) |>
   arrange(-n) |>
-  filter(n >= 20) |>
+  filter(n >= 15) |>
   pull(topic)
 
 plot_data <- country_lyrics |>
   select(year = entered_top_30_in, lyrics) |>
+  filter(year > 2013) |> 
   mutate(
     lyrics = str_to_lower(lyrics),
     as_tibble(
-      outer(lyrics, all_cols, \(x, y) str_detect(x, fixed(y))),
+      outer(lyrics, all_cols, \(x, y) str_detect(x, paste0("\\b", y, "\\b"))),
       .name_repair = ~all_cols
     )
   ) |>
@@ -116,7 +118,7 @@ social <- nrBrand::social_caption(
 )
 title <- "The Colour Palette of Country Music"
 st <- "The number of songs in the Top 30 Billboard Country Airplay with lyrics that mention..."
-cap <- source_caption(source = "youtube.com/@GradySmith", graphic = social, sep = " | ")
+cap <- paste0("**Note**: Only colours mentioned in at least 15 songs are included.<br>", source_caption(source = "youtube.com/@GradySmith", graphic = social, sep = " | "))
 
 
 # Plot --------------------------------------------------------------------
@@ -249,3 +251,4 @@ save_ggplot(
   plot = p,
   file = file.path("2026", "2026-08-25", paste0("20260825", ".png"))
 )
+
