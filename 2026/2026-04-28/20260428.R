@@ -36,10 +36,10 @@ highlight_col <- "#7F055F"
 
 # Data wrangling ----------------------------------------------------------
 
-plot_data <- tariff_agricultural |>
+plot_jam_data <- tariff_agricultural |>
   filter(agreement == "mfn", rate_type_code == 7) |>
   left_join(tariff_codes, by = "hts8", relationship = "many-to-many") |>
-  select(description, begin_effective_date, end_effective_date, ad_val_rate) |>
+  select(description, begin_effective_date, ad_val_rate) |>
   arrange(description, begin_effective_date) |>
   filter(
     str_detect(description, "jam"),
@@ -51,6 +51,14 @@ plot_data <- tariff_agricultural |>
     description = str_remove_all(description, "\\bjam\\b"),
     description = str_remove(description, "\\s*\\([^\\)]*\\)")
   )
+
+plot_data <- plot_jam_data |>
+  group_by(description) |>
+  mutate(end_effective_date = lead(begin_effective_date, default = ymd("2026-04-28"))) |>
+  ungroup() |>
+  group_by(description, begin_effective_date, end_effective_date) |>
+  slice_max(ad_val_rate) |>
+  ungroup()
 
 last_data <- plot_data |>
   group_by(description) |>
@@ -114,7 +122,7 @@ rescale_jar <- function(df, x_range, y_range,
   df$y <- y_range[1] + diff(y_range) * df$y
   df
 }
-x_range <- c(min(plot_data$begin_effective_date), today())
+x_range <- c(min(plot_data$begin_effective_date), ymd("2026-04-28"))
 y_range <- c(0, max(plot_data$ad_val_rate) + 11)
 jar <- rescale_jar(jar, x_range, y_range)
 lid <- rescale_jar(lid, x_range, y_range)
@@ -180,7 +188,8 @@ ggplot() +
     ),
     hjust = 0, vjust = 1,
     family = body_font,
-    colour = text_col
+    colour = text_col,
+    size = 3
   ) +
   geom_polygon(
     data = label_rect, mapping = aes(x = x, y = y),
@@ -246,6 +255,7 @@ ggplot() +
       family = body_font
     ),
     strip.text = element_blank(),
+    strip.clip = "off",
     panel.grid.minor = element_blank(),
     panel.spacing.x = unit(0.5, "lines")
   ) +
@@ -254,6 +264,7 @@ ggplot() +
     units = "in", bg = bg_col,
     dpi = 300
   ) -> p
+
 
 
 # Save --------------------------------------------------------------------
