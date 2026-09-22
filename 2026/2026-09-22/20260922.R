@@ -3,16 +3,14 @@
 library(tidyverse)
 library(showtext)
 library(ggtext)
-library(nrBrand)
 library(glue)
 library(ggview)
+library(emojifont)
 
 
 # Load data ---------------------------------------------------------------
 
-tuesdata <- tidytuesdayR::tt_load("2026-09-22")
-urban <- tuesdata$urban
-
+urban <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2026/2026-09-22/urban.csv')
 
 # Load fonts --------------------------------------------------------------
 
@@ -28,7 +26,7 @@ body_font <- "Nunito"
 
 bg_col <- "#F2F4F8"
 text_col <- "#151C28"
-highlight_col <- "#7F055F"
+highlight_col <- "#519623"
 
 
 # Data wrangling ----------------------------------------------------------
@@ -36,8 +34,8 @@ highlight_col <- "#7F055F"
 plot_data <- urban |>
   filter(countryOrTerritoryName == "United Kingdom of Great Britain and Northern Ireland") |>
   select(year,
-    city = cityName,
-    green_area = averageShareOfGreenAreaInCityUrbanAreaPct,
+         city = cityName,
+         green_area = averageShareOfGreenAreaInCityUrbanAreaPct,
   ) |>
   drop_na() |>
   mutate(
@@ -46,25 +44,34 @@ plot_data <- urban |>
   )
 
 plot_2020 <- plot_data |>
-  filter(year == 2020) |>
+  filter(year %in% c(2020, 2010)) |>
+  pivot_wider(names_from = year, values_from = green_area) |>
+  mutate(change = round(`2020` - `2010`)) |>
+  mutate(
+    label = case_when(
+      change > 0 ~ fontawesome("fa-arrow-circle-up"),
+      change < 0 ~ fontawesome("fa-arrow-circle-down"),
+      TRUE ~ fontawesome("fa-circle-o")
+    )
+  ) |>
+  select(city, `2020`, label) |>
+  pivot_longer(-c(label, city),
+               names_to = "year",
+               values_to = "green_area") |>
   arrange(desc(green_area))
 
 plot_data$city <- factor(plot_data$city,
-  levels = plot_2020$city
+                         levels = plot_2020$city
 )
-
+plot_2020$city <- factor(plot_2020$city,
+                         levels = plot_2020$city
+)
 
 # Define text -------------------------------------------------------------
 
-social <- nrBrand::social_caption(
-  bg_colour = bg_col,
-  icon_colour = highlight_col,
-  font_colour = text_col,
-  font_family = body_font
-)
-title <- ""
-st <- ""
-cap <- paste0("**Note**: Data for other UK cities is not available.", source_caption(source = "UN Habitat Urban Indicators Database", graphic = social))
+title <- glue('<span style="font-family:{title_font}; font-size:17pt;">**Green, green grass of Stoke**</span><br>Stoke-on-Trent  has dramatically increased the percentage of green space in the city since 1990, coming highest in 2020. Dundee remains at the bottom of the table, with even less green space than in previous years.')
+st <- "Average share of green area in UK city urban areas. 1990 - 2020."
+cap <- glue('**Note**: Icons in top right corners show change between 2020 and 2010. Data for other UK cities is not currently available.<br>**Source**: UN Habitat Urban Indicators Database<br>**Graphic**: <span style="font-family:fontawesome-webfont;">{fontawesome("fa-github")}</span> nrennie <span style="font-family:fontawesome-webfont;">{fontawesome("fa-gitlab")}</span> nrennie <span style="font-family:fontawesome-webfont;">{fontawesome("fa-linkedin")}</span> nicola-rennie')
 
 
 # Plot --------------------------------------------------------------------
@@ -73,23 +80,58 @@ ggplot() +
   geom_rect(
     data = plot_data,
     mapping = aes(
-      xmin = -sqrt(100) / 2, xmax = sqrt(100) / 2,
-      ymin = -sqrt(100) / 2, ymax = sqrt(100) / 2
+      ymin = 0, ymax = 100,
+      xmin = year - 5, xmax = year + 5
     ),
-    fill = "grey70"
+    fill = "grey80"
   ) +
   geom_rect(
     data = plot_data,
     mapping = aes(
-      xmin = -sqrt(green_area) / 2, xmax = sqrt(green_area) / 2,
-      ymin = -sqrt(green_area) / 2, ymax = sqrt(green_area) / 2
+      ymin = 0, ymax = green_area,
+      xmin = year - 5, xmax = year + 5,
+      fill = as.character(year)
     ),
-    fill = "#519623"
   ) +
-  facet_grid(city ~ year, switch = "y") +
-  coord_fixed() +
+  # city names
+  geom_text(
+    data = plot_2020,
+    mapping = aes(x = 1986, y = 95, label = city),
+    vjust = 1,
+    hjust = 0,
+    family = title_font
+  ) +
+  # up down labels
+  geom_text(
+    data = plot_2020,
+    mapping = aes(x = 2024, y = 95, label = label),
+    vjust = 1,
+    hjust = 1,
+    family = "fontawesome-webfont",
+  ) +
+  # Percentage labels
+  geom_text(
+    data = plot_data,
+    mapping = aes(x = year, y = green_area + 3,
+                  label = paste0(round(green_area), "%")),
+    vjust = 0,
+    hjust = 0.5,
+    size = 2.5,
+    family = body_font
+  ) +
+  scale_fill_manual(
+    values = c("#41781c", "#519623", "#41781c", "#519623")
+  ) +
+  scale_x_continuous(breaks = seq(1990, 2020, 10)) +
+  labs(title = title,
+       subtitle = st,
+       caption = cap,
+       x = NULL, y = NULL) +
+  facet_wrap(~city, ncol = 4, axes = "all_x") +
+  coord_cartesian(expand = FALSE) +
   theme_minimal(base_size = 10, base_family = body_font) +
   theme(
+    legend.position = "none",
     plot.margin = margin(5, 5, 5, 5),
     plot.title.position = "plot",
     plot.caption.position = "plot",
@@ -100,59 +142,37 @@ ggplot() +
       hjust = 0,
       halign = 0,
       margin = margin(b = 5, t = 5),
-      family = title_font,
-      face = "bold",
-      size = rel(1.5)
+      family = body_font,
+      size = rel(1)
     ),
     plot.subtitle = element_textbox_simple(
       colour = text_col,
       hjust = 0,
       halign = 0,
       margin = margin(b = 5, t = 5),
-      family = body_font
+      family = body_font,
+      size = rel(0.9)
     ),
     plot.caption = element_textbox_simple(
       colour = text_col,
       hjust = 0,
       halign = 0,
       margin = margin(b = 0, t = 10),
-      family = body_font
-    ),
-    strip.text = element_textbox_simple(
-      face = "bold",
-      hjust = 0.5,
-      halign = 0.5,
+      family = body_font,
       size = rel(0.9)
     ),
-    strip.text.y.left = element_text(
-      face = "bold",
-      angle = 0,
-      hjust = 1,
-      vjust = 0.5,
-      size = rel(0.9)
-    ),
+    strip.text = element_blank(),
     panel.grid = element_blank(),
-    axis.text = element_blank(),
-    panel.spacing = unit(0.01, "lines")
+    axis.text.y = element_blank(),
+    axis.text.x = element_text(size = rel(0.9),
+                               family = body_font),
+    panel.spacing = unit(0.4, "lines")
   ) +
   canvas(
-    width = 4, height = 8,
+    width = 5, height = 7,
     units = "in", bg = bg_col,
     dpi = 300
-  ) # -> p
-
-# add perc labels
-# add how to read this chart legend/annotations
-# Maybe make this a table?
-
-"Green square represents the avreage percentage of ... "
-
-"Grey square represents the total area of the city."
-
-"Dundee has consistently had the lowest percentage of green space."
-
-"Stoke-on-Trent has the highest percentage of green space, improving dramatically since 1990 when it had very little."
-
+  ) -> p
 
 
 # Save --------------------------------------------------------------------
